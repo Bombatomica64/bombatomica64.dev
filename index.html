@@ -5,8 +5,20 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Bombatomica64 — Overworld</title>
 <link rel="canonical" href="https://bombatomica64.dev/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Bombatomica64">
+<meta property="og:url" content="https://bombatomica64.dev/">
 <meta property="og:title" content="Bombatomica64 — Lorenzo Micheli">
 <meta property="og:description" content="Rust, C and DevOps projects laid out as a world map you can walk.">
+<meta property="og:image" content="https://bombatomica64.dev/og.png">
+<meta property="og:image:type" content="image/png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Title screen of bombatomica64.dev: a cartoon bomb above the name BOMBATOMICA64, over a map of four islands.">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Bombatomica64 — Lorenzo Micheli">
+<meta name="twitter:description" content="Rust, C and DevOps projects laid out as a world map you can walk.">
+<meta name="twitter:image" content="https://bombatomica64.dev/og.png">
 <meta name="theme-color" content="#1f44c9">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 64 64%22%3E%3Ccircle cx=%2228%22 cy=%2238%22 r=%2220%22 fill=%22%230c0f2e%22/%3E%3Ccircle cx=%2221%22 cy=%2231%22 r=%226%22 fill=%22%233a67ee%22/%3E%3Ccircle cx=%2255%22 cy=%2210%22 r=%227%22 fill=%22%23ffd23f%22/%3E%3Cpath d=%22M40 20q6-10 14-8%22 stroke=%22%230c0f2e%22 stroke-width=%225%22 fill=%22none%22/%3E%3C/svg%3E">
 <meta name="description" content="Lorenzo Micheli (Bombatomica64): Rust, C and DevOps projects laid out as a world map you can walk.">
@@ -118,19 +130,37 @@ section.page{padding:clamp(72px,10vw,128px) clamp(16px,5vw,64px);max-width:1180p
 .profile ul{list-style:none;padding:0;margin:1.4rem 0 0;display:grid;grid-template-columns:auto 1fr;gap:.5rem 1.2rem;max-width:560px}
 .profile li{display:contents}
 .profile .k{font:700 .85rem/1.6 var(--body);color:var(--gold);text-transform:uppercase;letter-spacing:.06em}
-.inv{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:2rem}
-.slot{background:var(--night);border-radius:14px;padding:16px;min-height:132px;display:flex;flex-direction:column;justify-content:space-between;transition:transform .3s var(--ease),background .3s}
-.slot:hover{transform:translateY(-4px);background:#0f1d66}
-.slot b{font-family:var(--display);font-weight:400;font-size:1.3rem;line-height:1.05;color:var(--paper)}
-.slot span{font-size:.88rem;color:var(--on-sea-muted);line-height:1.4}
-.slot i{display:block;width:28px;height:28px;border-radius:8px;margin-bottom:10px}
-.saves{list-style:none;margin:2.2rem 0 0;padding:0;position:relative}
-.saves::before{content:"";position:absolute;left:11px;top:8px;bottom:8px;width:4px;border-radius:4px;background:var(--sea-lite)}
-.saves li{position:relative;padding:0 0 1.8rem 48px}
-.saves li::before{content:"";position:absolute;left:2px;top:6px;width:22px;height:22px;transform:rotate(45deg);background:var(--gold);border-radius:4px;box-shadow:0 0 0 5px var(--sea-deep)}
-.saves .yr{font-family:var(--display);font-size:1.5rem;color:var(--paper);display:block;line-height:1.2}
-.saves .what{color:var(--foam);max-width:62ch}
-.saves small{display:block;color:var(--gold);font-weight:700;margin-top:.2rem}
+.warp{color:var(--paper);font-weight:700;white-space:nowrap;text-decoration:underline dotted var(--gold) 2px;text-underline-offset:.28em;transition:color .2s}
+.warp:hover{color:var(--gold);text-decoration-style:solid}
+.gear{list-style:none;margin:2.6rem 0 0;padding:0}
+.gear li{position:relative;display:grid;grid-template-columns:minmax(0,25rem) 1fr;gap:.35rem clamp(20px,4vw,56px);align-items:baseline;padding:1.2rem 0 1.25rem;background:radial-gradient(circle,var(--sea-lite) 2.5px,transparent 3px) 0 0/16px 6px repeat-x}
+.gear li:last-child{padding-bottom:0}
+.gear b{font-family:var(--display);font-weight:400;font-size:clamp(1.35rem,2.4vw,1.75rem);line-height:1.1;color:var(--paper);transition:transform .3s var(--ease),color .3s}
+.gear .uses{color:var(--foam);font-size:1.125rem;max-width:60ch}
+.gear li::before{content:"";position:absolute;left:-30px;top:1.55rem;width:18px;height:18px;background:var(--gold);clip-path:polygon(50% 0,65% 35%,100% 50%,65% 65%,50% 100%,35% 65%,0 50%,35% 35%);opacity:0;transform:translateX(-10px) scale(.6);transition:opacity .2s,transform .3s var(--ease)}
+@media (hover:hover) and (min-width:721px){
+  .gear li:hover::before,.gear li:focus-within::before{opacity:1;transform:none}
+  .gear li:hover b,.gear li:focus-within b{color:var(--gold)}
+}
+.saves{list-style:none;margin:3rem 0 0;padding:0;display:grid;grid-template-columns:1fr 1fr 1.25fr 1.5fr;gap:0 clamp(18px,2.5vw,36px)}
+.saves li{position:relative;display:flex;flex-direction:column;align-items:flex-start}
+.saves li:not(:last-child)::before{content:"";position:absolute;left:28px;top:22px;width:calc(100% + clamp(18px,2.5vw,36px));height:10px;background:radial-gradient(circle,var(--paper) 3.5px,transparent 4px) 0 50%/16px 10px repeat-x}
+.saves .pin{position:relative;width:56px;height:56px;margin:0 0 1rem;overflow:visible}
+.saves .pin .ring{transform-box:fill-box;transform-origin:center;animation:ring 1.6s var(--ease) infinite}
+.saves .yr{font-family:var(--display);font-size:clamp(1.7rem,2.6vw,2.1rem);color:var(--paper);line-height:1.1;margin-bottom:.45rem}
+.saves .now{font:700 .78rem/1 var(--body);background:var(--lava);color:var(--ink);padding:.4rem .6rem;border-radius:999px;margin:.1rem 0 .7rem}
+.saves .what{color:var(--foam);font-size:1rem;max-width:34ch}
+@media (max-width:860px){
+  .saves{grid-template-columns:1fr}
+  .saves li{display:grid;grid-template-columns:56px 1fr;column-gap:18px;align-items:start;padding-bottom:2.2rem}
+  .saves li:last-child{padding-bottom:0}
+  .saves li:not(:last-child)::before{left:23px;top:28px;width:10px;height:100%;background:radial-gradient(circle,var(--paper) 3.5px,transparent 4px) 50% 0/10px 16px repeat-y}
+  .saves .pin{grid-row:1/span 3;margin:0}
+  .saves .yr,.saves .now,.saves .what{grid-column:2}
+  .saves .yr{margin-top:.5rem}
+  .saves .now{justify-self:start}
+  .saves .what{max-width:60ch}
+}
 .credits{text-align:center;padding-bottom:clamp(96px,12vw,160px)}
 .credits .roll{font-family:var(--display);font-size:clamp(2.4rem,8vw,5.6rem);line-height:.95;color:var(--gold);margin:0 0 .3em;letter-spacing:-.02em}
 .credits p{margin:0 auto 2rem;max-width:44ch;color:var(--foam)}
@@ -145,7 +175,7 @@ footer{text-align:center;padding:0 16px 40px;color:var(--on-sea-muted);font-size
   .card{left:16px;right:16px;width:auto;padding:16px 16px 14px}
   .card p{font-size:.95rem}
   .profile{grid-template-columns:1fr}
-  .inv{grid-template-columns:1fr 1fr}
+  .gear li{grid-template-columns:1fr}
   .profile svg{max-width:200px}
   .hud-actions .btn .lbl{display:none}
 }
@@ -235,25 +265,25 @@ footer{text-align:center;padding:0 16px 40px;color:var(--on-sea-muted);font-size
 
   <section class="page" aria-labelledby="invH">
     <h2 id="invH">Inventory</h2>
-    <p class="lede">Gear picked up along the way, and where it gets used.</p>
-    <div class="inv">
-      <div class="slot"><div><i style="background:var(--lava)"></i><b>Rust</b></div><span>smelt, cargo-gpui, GPUI on Android, matrix</span></div>
-      <div class="slot"><div><i style="background:var(--sea-lite)"></i><b>C / C++</b></div><span>minishell, CUB3D, so_long, ft_irc, Noctalia widgets</span></div>
-      <div class="slot"><div><i style="background:var(--pink)"></i><b>TypeScript · Angular</b></div><span>agent-board (Angular 22 SSR), web front-ends</span></div>
-      <div class="slot"><div><i style="background:var(--gold)"></i><b>Python · Django</b></div><span>dslr, linear regression, back-ends, agent skills</span></div>
-      <div class="slot"><div><i style="background:var(--grass)"></i><b>Docker · Kubernetes</b></div><span>Inception, Inception-of-Things, Price Ninja in production</span></div>
-      <div class="slot"><div><i style="background:var(--rock-lt)"></i><b>CI/CD</b></div><span>pipelines, self-hosted runners, coverage bots</span></div>
-    </div>
+    <p class="lede">Gear picked up along the way, and where it gets used. Underlined names warp to that level on the map.</p>
+    <ul class="gear">
+      <li><b>Rust</b><span class="uses"><a class="warp" href="#top" data-lv="smelt">smelt</a>, <a class="warp" href="#top" data-lv="cargo-gpui">cargo-gpui</a>, <a class="warp" href="#top" data-lv="GPUI Mobile Lab">GPUI on Android</a>, <a class="warp" href="#top" data-lv="matrix">matrix</a></span></li>
+      <li><b>C / C++</b><span class="uses"><a class="warp" href="#top" data-lv="minishell">minishell</a>, <a class="warp" href="#top" data-lv="CUB3D">CUB3D</a>, <a class="warp" href="#top" data-lv="so_long">so_long</a>, <a class="warp" href="#top" data-lv="ft_irc">ft_irc</a>, <a class="warp" href="#top" data-lv="slack-sidebar">Noctalia widgets</a></span></li>
+      <li><b>TypeScript · Angular</b><span class="uses"><a class="warp" href="#top" data-lv="agent-board">agent-board</a> (Angular 22 SSR), web front-ends</span></li>
+      <li><b>Python · Django</b><span class="uses">dslr, linear regression, back-ends, <a class="warp" href="#top" data-lv="unit-to-e2e-tests">agent skills</a></span></li>
+      <li><b>Docker · Kubernetes</b><span class="uses">Inception, Inception-of-Things, Price Ninja in production</span></li>
+      <li><b>CI/CD</b><span class="uses">pipelines, self-hosted runners, <a class="warp" href="#top" data-lv="matrix">coverage bots</a></span></li>
+    </ul>
   </section>
 
   <section class="page" aria-labelledby="saveH">
     <h2 id="saveH">Save points</h2>
     <p class="lede">The run so far, by year of last activity on GitHub.</p>
     <ol class="saves">
-      <li><span class="yr">2023</span><span class="what">First steps at 42: so_long, pipex.</span></li>
-      <li><span class="yr">2024</span><span class="what">philo, CUB3D raycaster, Inception with Docker.</span></li>
-      <li><span class="yr">2025</span><span class="what">minishell, ft_irc, Inception-of-Things on Kubernetes, TypeScript side projects, linear regression.</span></li>
-      <li><span class="yr">2026</span><span class="what">smelt, cargo-gpui, GPUI on Android, zed-practice, agent-board, slidesmith, Noctalia sidebars.</span><small>Current save.</small></li>
+      <li><svg class="pin" viewBox="-28 -28 56 56" aria-hidden="true"><circle r="24" cy="4" fill="#efe2c2"/><circle r="24" fill="#fff8e8"/><path d="M0,-11 L3.2,-3.6 11,-3.4 4.8,1.6 7,9.4 0,5 -7,9.4 -4.8,1.6 -11,-3.4 -3.2,-3.6Z" fill="#0c0f2e"/></svg><span class="yr">2023</span><span class="what">First steps at 42: <a class="warp" href="#top" data-lv="so_long">so_long</a>, <a class="warp" href="#top" data-lv="pipex">pipex</a>.</span></li>
+      <li><svg class="pin" viewBox="-28 -28 56 56" aria-hidden="true"><circle r="24" cy="4" fill="#efe2c2"/><circle r="24" fill="#fff8e8"/><path d="M0,-11 L3.2,-3.6 11,-3.4 4.8,1.6 7,9.4 0,5 -7,9.4 -4.8,1.6 -11,-3.4 -3.2,-3.6Z" fill="#0c0f2e"/></svg><span class="yr">2024</span><span class="what"><a class="warp" href="#top" data-lv="philo">philo</a>, <a class="warp" href="#top" data-lv="CUB3D">CUB3D</a> raycaster, Inception with Docker.</span></li>
+      <li><svg class="pin" viewBox="-28 -28 56 56" aria-hidden="true"><circle r="24" cy="4" fill="#efe2c2"/><circle r="24" fill="#fff8e8"/><path d="M0,-11 L3.2,-3.6 11,-3.4 4.8,1.6 7,9.4 0,5 -7,9.4 -4.8,1.6 -11,-3.4 -3.2,-3.6Z" fill="#0c0f2e"/></svg><span class="yr">2025</span><span class="what"><a class="warp" href="#top" data-lv="minishell">minishell</a>, <a class="warp" href="#top" data-lv="ft_irc">ft_irc</a>, Inception-of-Things on Kubernetes, TypeScript side projects, linear regression.</span></li>
+      <li><svg class="pin" viewBox="-28 -28 56 56" aria-hidden="true"><circle class="ring" r="26" fill="none" stroke="#ffd23f" stroke-width="4"/><circle r="24" cy="4" fill="#b8360f"/><circle r="24" fill="#ff5a2a"/><rect x="-6" y="-13" width="3.5" height="26" rx="1.5" fill="#0c0f2e"/><path d="M-2.5,-13 L12,-7.5 L-2.5,-2Z" fill="#fff8e8"/></svg><span class="yr">2026</span><span class="now">Current save</span><span class="what"><a class="warp" href="#top" data-lv="smelt">smelt</a>, <a class="warp" href="#top" data-lv="cargo-gpui">cargo-gpui</a>, <a class="warp" href="#top" data-lv="GPUI Mobile Lab">GPUI on Android</a>, <a class="warp" href="#top" data-lv="zed-practice">zed-practice</a>, <a class="warp" href="#top" data-lv="agent-board">agent-board</a>, <a class="warp" href="#top" data-lv="slidesmith">slidesmith</a>, <a class="warp" href="#top" data-lv="slack-sidebar">Noctalia sidebars</a>.</span></li>
     </ol>
   </section>
 
@@ -505,6 +535,12 @@ $('start').addEventListener('click', begin);
 $('prev').addEventListener('click', () => { begin(); travelTo((walk ? walk.to : here) - 1); });
 $('next').addEventListener('click', () => { begin(); travelTo((walk ? walk.to : here) + 1); });
 $('mapBtn').addEventListener('click', () => { begin(); setMap(!mapMode); });
+document.querySelectorAll('a[data-lv]').forEach(a => a.addEventListener('click', e => {
+  const i = levels.findIndex(l => l.t === a.dataset.lv); if (i < 0) return;
+  e.preventDefault(); begin();
+  walk = null; here = i; pos.x = levels[i].x; pos.y = levels[i].y; $('card').classList.remove('walking'); setMap(false); show(i);
+  $('stage').scrollIntoView({ behavior: reduce ? 'auto' : 'smooth' });
+}));
 let mapVisible = true;
 new IntersectionObserver(([e]) => { mapVisible = e.isIntersecting && e.intersectionRatio > .5; }, { threshold: [0, .5, 1] }).observe($('stage'));
 addEventListener('keydown', e => {
