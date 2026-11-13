@@ -6,8 +6,14 @@ A single static `index.html`: hand-written HTML, CSS and vanilla JS. The overwor
 
 ## Run locally
 
-Open `index.html` in a browser, or `python3 -m http.server`.
+Open `index.html` in a browser, or run the image:
+
+```bash
+docker build -t bombatomica64 . && docker run --rm -p 8080:8080 bombatomica64
+```
 
 ## Deploy
 
-It runs as a pod on the home k3s cluster via ArgoCD, from `apps/bombatomica64` in `CodeDrevia/simple-server`. That chart currently carries its own copy of the page in `site/index.html`, so a change here must be copied there and merged to go live.
+Push to `main`. The image builder on the home k3s box (`image-builder@bombatomica64` in `CodeDrevia/simple-server`) notices the new commit within a couple of minutes. It builds this Dockerfile and pushes `ghcr.io/codedrevia/bombatomica64:<short-sha>`. Then it bumps the tag in `apps/bombatomica64/values.yaml`, and ArgoCD rolls the pod.
+
+Logs: `journalctl -u image-builder@bombatomica64` on the box.
