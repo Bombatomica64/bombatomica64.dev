@@ -4,7 +4,12 @@ Personal site, served at https://bombatomica64.dev.
 
 A single static `index.html`: hand-written HTML, CSS and vanilla JS. The overworld map is an SVG generated at load time (seeded islands, paths, a camera that pans the viewBox). No build step, no dependencies besides Google Fonts.
 
-The page opens on a console menu in the style of a cross-media bar: sections run left to right, the open section's items run top to bottom, and the selection stays put while everything else slides under it. The wave behind it is drawn on a canvas. The map is one of the items in the Player section; project screenshots live in `previews/`.
+The page opens on a console menu in the style of a cross-media bar: sections run left to right, the open section's items run top to bottom, and the selection stays put while everything else slides under it. The wave behind it is drawn on a canvas.
+
+- **Projects** live in the `levels` array in `index.html`, grouped into the `worlds` above it. Each one needs a 1100x500 screenshot at `previews/<repo name, lowercased>.webp` and a position on the map.
+- **Pages** (player file, inventory, save points) are plain HTML at the bottom of the file. The script moves them into the console, where they open over the menu; without the script they read as an ordinary page.
+- **Addresses**: every item has one. `/#smelt` selects a project, `/#inventory` opens a page, `/#map` opens the map.
+- **Sound** is synthesised in the browser and off until turned on from the bottom bar.
 
 ## Run locally
 

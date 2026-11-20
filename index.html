@@ -3,25 +3,25 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Bombatomica64 — Overworld</title>
+<title>Bombatomica64 — Lorenzo Micheli</title>
 <link rel="canonical" href="https://bombatomica64.dev/">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Bombatomica64">
 <meta property="og:url" content="https://bombatomica64.dev/">
 <meta property="og:title" content="Bombatomica64 — Lorenzo Micheli">
-<meta property="og:description" content="Rust, C and DevOps projects laid out as a world map you can walk.">
+<meta property="og:description" content="Rust, C and DevOps projects, browsed from a console menu or walked as an island map.">
 <meta property="og:image" content="https://bombatomica64.dev/og.png">
 <meta property="og:image:type" content="image/png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="Title screen of bombatomica64.dev: a cartoon bomb above the name BOMBATOMICA64, over a map of four islands.">
+<meta property="og:image:alt" content="The bombatomica64.dev console: a row of section icons above a list of projects, with a preview of the selected one.">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Bombatomica64 — Lorenzo Micheli">
-<meta name="twitter:description" content="Rust, C and DevOps projects laid out as a world map you can walk.">
+<meta name="twitter:description" content="Rust, C and DevOps projects, browsed from a console menu or walked as an island map.">
 <meta name="twitter:image" content="https://bombatomica64.dev/og.png">
 <meta name="theme-color" content="#1f44c9">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 64 64%22%3E%3Ccircle cx=%2228%22 cy=%2238%22 r=%2220%22 fill=%22%230c0f2e%22/%3E%3Ccircle cx=%2221%22 cy=%2231%22 r=%226%22 fill=%22%233a67ee%22/%3E%3Ccircle cx=%2255%22 cy=%2210%22 r=%227%22 fill=%22%23ffd23f%22/%3E%3Cpath d=%22M40 20q6-10 14-8%22 stroke=%22%230c0f2e%22 stroke-width=%225%22 fill=%22none%22/%3E%3C/svg%3E">
-<meta name="description" content="Lorenzo Micheli (Bombatomica64): Rust, C and DevOps projects laid out as a world map you can walk.">
+<meta name="description" content="Lorenzo Micheli (Bombatomica64): Rust, C and DevOps projects, browsed from a console menu or walked as an island map.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Dela+Gothic+One&family=Figtree:wght@400;500;700;800&family=JetBrains+Mono:wght@500&family=M+PLUS+1p:wght@300;400&display=swap" rel="stylesheet">
@@ -37,6 +37,7 @@
   --body:"Figtree",system-ui,sans-serif;
   --mono:"JetBrains Mono",ui-monospace,monospace;
   --ease:cubic-bezier(.16,1,.3,1);
+  --ui:"M PLUS 1p","Figtree",system-ui,sans-serif;
 }
 *{box-sizing:border-box}
 html{scroll-behavior:smooth;scrollbar-color:var(--sea-lite) var(--night)}
@@ -117,55 +118,10 @@ a{color:inherit;text-underline-offset:.2em;text-decoration-thickness:2px}
 @keyframes blink{50%{opacity:.35}}
 .title small{display:block;margin-top:1rem;color:var(--on-sea-muted);font-size:.85rem}
 
-/* ---------- below the map ---------- */
-section.page{padding:clamp(72px,10vw,128px) clamp(16px,5vw,64px);max-width:1180px;margin:0 auto}
-.page h2{font-family:var(--display);font-weight:400;font-size:clamp(2rem,5vw,3.6rem);line-height:1;letter-spacing:-.02em;margin:0 0 .5em;text-wrap:balance}
-.lede{font-size:clamp(1.1rem,1.6vw,1.3rem);max-width:58ch;color:var(--foam)}
-#profile{max-width:none;background:var(--paper);color:var(--ink)}
-#profile .profile{max-width:1052px;margin:0 auto}
-#profile .lede{color:var(--muted-ink)}
-#profile .k{color:#b8360f}
-.profile{display:grid;grid-template-columns:minmax(180px,300px) 1fr;gap:clamp(28px,5vw,72px);align-items:center}
-.profile svg{width:100%;height:auto}
-.profile ul{list-style:none;padding:0;margin:1.4rem 0 0;display:grid;grid-template-columns:auto 1fr;gap:.5rem 1.2rem;max-width:560px}
-.profile li{display:contents}
-.profile .k{font:700 .85rem/1.6 var(--body);color:var(--gold);text-transform:uppercase;letter-spacing:.06em}
-.warp{color:var(--paper);font-weight:700;white-space:nowrap;text-decoration:underline dotted var(--gold) 2px;text-underline-offset:.28em;transition:color .2s}
-.warp:hover{color:var(--gold);text-decoration-style:solid}
-.gear{list-style:none;margin:2.6rem 0 0;padding:0}
-.gear li{position:relative;display:grid;grid-template-columns:minmax(0,25rem) 1fr;gap:.35rem clamp(20px,4vw,56px);align-items:baseline;padding:1.2rem 0 1.25rem;background:radial-gradient(circle,var(--sea-lite) 2.5px,transparent 3px) 0 0/16px 6px repeat-x}
-.gear li:last-child{padding-bottom:0}
-.gear b{font-family:var(--display);font-weight:400;font-size:clamp(1.35rem,2.4vw,1.75rem);line-height:1.1;color:var(--paper);transition:transform .3s var(--ease),color .3s}
-.gear .uses{color:var(--foam);font-size:1.125rem;max-width:60ch}
-.gear li::before{content:"";position:absolute;left:-30px;top:1.55rem;width:18px;height:18px;background:var(--gold);clip-path:polygon(50% 0,65% 35%,100% 50%,65% 65%,50% 100%,35% 65%,0 50%,35% 35%);opacity:0;transform:translateX(-10px) scale(.6);transition:opacity .2s,transform .3s var(--ease)}
-@media (hover:hover) and (min-width:721px){
-  .gear li:hover::before,.gear li:focus-within::before{opacity:1;transform:none}
-  .gear li:hover b,.gear li:focus-within b{color:var(--gold)}
-}
-.saves{list-style:none;margin:3rem 0 0;padding:0;display:grid;grid-template-columns:1fr 1fr 1.25fr 1.5fr;gap:0 clamp(18px,2.5vw,36px)}
-.saves li{position:relative;display:flex;flex-direction:column;align-items:flex-start}
-.saves li:not(:last-child)::before{content:"";position:absolute;left:28px;top:22px;width:calc(100% + clamp(18px,2.5vw,36px));height:10px;background:radial-gradient(circle,var(--paper) 3.5px,transparent 4px) 0 50%/16px 10px repeat-x}
-.saves .pin{position:relative;width:56px;height:56px;margin:0 0 1rem;overflow:visible}
-.saves .pin .ring{transform-box:fill-box;transform-origin:center;animation:ring 1.6s var(--ease) infinite}
-.saves .yr{font-family:var(--display);font-size:clamp(1.7rem,2.6vw,2.1rem);color:var(--paper);line-height:1.1;margin-bottom:.45rem}
-.saves .now{font:700 .78rem/1 var(--body);background:var(--lava);color:var(--ink);padding:.4rem .6rem;border-radius:999px;margin:.1rem 0 .7rem}
-.saves .what{color:var(--foam);font-size:1rem;max-width:34ch}
-@media (max-width:860px){
-  .saves{grid-template-columns:1fr}
-  .saves li{display:grid;grid-template-columns:56px 1fr;column-gap:18px;align-items:start;padding-bottom:2.2rem}
-  .saves li:last-child{padding-bottom:0}
-  .saves li:not(:last-child)::before{left:23px;top:28px;width:10px;height:100%;background:radial-gradient(circle,var(--paper) 3.5px,transparent 4px) 50% 0/10px 16px repeat-y}
-  .saves .pin{grid-row:1/span 3;margin:0}
-  .saves .yr,.saves .now,.saves .what{grid-column:2}
-  .saves .yr{margin-top:.5rem}
-  .saves .now{justify-self:start}
-  .saves .what{max-width:60ch}
-}
-.credits{text-align:center;padding-bottom:clamp(96px,12vw,160px)}
-.credits .roll{font-family:var(--display);font-size:clamp(2.4rem,8vw,5.6rem);line-height:.95;color:var(--gold);margin:0 0 .3em;letter-spacing:-.02em}
-.credits p{margin:0 auto 2rem;max-width:44ch;color:var(--foam)}
-.credits .links{display:flex;flex-wrap:wrap;gap:10px;justify-content:center}
-footer{text-align:center;padding:0 16px 40px;color:var(--on-sea-muted);font-size:.85rem}
+/* ---------- without the script: the three pages as plain reading ---------- */
+.pages{max-width:920px;margin:0 auto;padding:56px 20px 8px;color:#fff;font-family:var(--ui)}
+.pages .xmb-page{margin-bottom:72px}
+.foot{padding:0 20px 40px;text-align:center;color:var(--on-sea-muted);font:.9rem var(--ui)}
 
 @media (max-width:720px){
   .card .keys{display:none}
@@ -173,9 +129,6 @@ footer{text-align:center;padding:0 16px 40px;color:var(--on-sea-muted);font-size
   .brand svg{width:28px;height:28px}
   .card{left:16px;right:16px;width:auto;padding:16px 16px 14px}
   .card p{font-size:.95rem}
-  .profile{grid-template-columns:1fr}
-  .gear li{grid-template-columns:1fr}
-  .profile svg{max-width:200px}
 }
 @media (max-width:900px){
   .where,.hud-actions .btn .lbl{display:none}
@@ -192,11 +145,10 @@ footer{text-align:center;padding:0 16px 40px;color:var(--on-sea-muted);font-size
 /* ---------- console: a cross-bar menu ---------- */
 [hidden]{display:none!important}
 .xmb{
-  --ui:"M PLUS 1p","Figtree",system-ui,sans-serif;
   --ax:clamp(190px,25vw,480px); --ay:clamp(168px,27svh,250px);
   --step:clamp(112px,10.5vw,160px);
   --box:132px; --row:60px; --cur-y:148px; --below-y:236px; --above-y:-98px;
-  --gutter:clamp(20px,3.4vw,48px);
+  --gutter:clamp(20px,3.4vw,48px); --page-shift:calc(var(--ax) - 104px);
   --h:max(100svh,680px);
   position:relative;isolation:isolate;overflow:hidden;height:var(--h);
   color:#fff;font-family:var(--ui);font-weight:400;text-shadow:0 1px 3px #06103c8c;
@@ -212,7 +164,7 @@ footer{text-align:center;padding:0 16px 40px;color:var(--on-sea-muted);font-size
 .xmb-clock{display:flex;align-items:center;gap:14px;margin:0;font-size:1.06rem;font-weight:300;font-variant-numeric:tabular-nums;white-space:nowrap}
 .xmb-clock::before{content:"";width:clamp(48px,14vw,220px);height:1px;background:linear-gradient(90deg,#fff0,#fffc)}
 
-.xmb-cross{position:absolute;inset:0;overflow:hidden;touch-action:pan-y;
+.xmb-cross{position:absolute;inset:0;overflow:hidden;touch-action:pan-y;opacity:calc(1 - .6 * var(--depth, 0));transform:translateX(calc(var(--depth, 0) * var(--page-shift) * -1));
   -webkit-mask-image:linear-gradient(#0000 44px,#000 104px,#000 calc(100% - 120px),#0000 calc(100% - 56px));
   mask-image:linear-gradient(#0000 44px,#000 104px,#000 calc(100% - 120px),#0000 calc(100% - 56px))}
 .xmb-track{position:absolute;left:var(--ax);top:var(--ay);width:0;height:0;transform:translateX(calc(var(--pos) * var(--step) * -1));animation:xmb-boot .7s ease-out both}
@@ -222,8 +174,8 @@ footer{text-align:center;padding:0 16px 40px;color:var(--on-sea-muted);font-size
 @property --hov{syntax:"<number>";inherits:true;initial-value:0}
 .xmb-cat{--f:0;position:absolute;left:calc(var(--i) * var(--step));top:0;width:var(--step);height:80px;margin:-40px 0 0 calc(var(--step) / -2);padding:0;border:0;background:none;color:inherit;font:inherit;text-shadow:inherit;cursor:pointer;display:grid;place-items:center;transition:--hov .2s}
 .xmb-cat:hover,.xmb-cat:focus-visible{--hov:1}
-.xmb-cat svg{width:72px;height:72px;opacity:calc(.62 + .38 * max(var(--f), var(--hov, 0) * .75));transform:scale(calc(.68 + .32 * var(--f)));filter:drop-shadow(0 0 9px rgb(255 255 255 / calc(.45 * var(--f)))) drop-shadow(0 2px 4px #06103c80)}
-.xmb-cat-label{position:absolute;top:100%;left:50%;transform:translateX(-50%);white-space:nowrap;text-align:center;font-size:1rem;line-height:1.3;opacity:max(var(--f) * 2 - 1, var(--hov, 0));pointer-events:none}
+.xmb-cat svg{width:72px;height:72px;opacity:calc((.62 + .38 * max(var(--f), var(--hov, 0) * .75)) * (1 - var(--depth, 0) * (1 - var(--f))));transform:scale(calc(.68 + .32 * var(--f)));filter:drop-shadow(0 0 9px rgb(255 255 255 / calc(.45 * var(--f)))) drop-shadow(0 2px 4px #06103c80)}
+.xmb-cat-label{position:absolute;top:100%;left:50%;transform:translateX(-50%);white-space:nowrap;text-align:center;font-size:1rem;line-height:1.3;opacity:calc(max(var(--f) * 2 - 1, var(--hov, 0)) * (1 - var(--depth, 0)));pointer-events:none}
 .xmb-cat-label small{display:block;font-size:.82rem;font-weight:300;opacity:calc(var(--f) * 1.6 - .8)}
 
 .xmb-col{position:absolute;left:calc(var(--i) * var(--step));top:0;opacity:var(--show, 0);visibility:hidden}
@@ -243,14 +195,14 @@ footer{text-align:center;padding:0 16px 40px;color:var(--on-sea-muted);font-size
 @keyframes xmb-pulse{50%{opacity:.95}}
 .xmb.is-paused .xmb-tile::before{animation-play-state:paused}
 .xmb-item:focus-visible .xmb-tile{outline:2px solid #fff;outline-offset:5px}
-.xmb-text{position:relative;display:block}
+.xmb-text{position:relative;display:block;opacity:calc(1 - var(--depth, 0) * 1.5)}
 .xmb-name{display:block;font-size:clamp(1.4rem,1.1rem + .75vw,1.8rem);font-weight:400;line-height:1.2;transform-origin:0 50%;transform:translateY(calc(var(--g) * -.4em)) scale(calc(.62 + .38 * var(--g)))}
 .is-near .xmb-name{font-weight:300}
 .xmb-sub{position:absolute;left:0;top:calc(100% - .42em);display:flex;align-items:center;gap:.9em;font-size:.94rem;font-weight:400;opacity:calc(var(--g) * 2.4 - 1.48)}
 .xmb-sub span{display:inline-flex;align-items:center;gap:.35em}
 .xmb-sub svg{width:1.05em;height:1.05em}
 
-.xmb-detail{position:absolute;z-index:1;left:calc(var(--ax) + clamp(330px,31vw,470px));right:var(--gutter);top:calc(var(--ay) + 76px);max-width:720px}
+.xmb-detail{opacity:calc(1 - var(--depth, 0) * 2);transform:translateX(calc(var(--depth, 0) * -80px));position:absolute;z-index:1;left:calc(var(--ax) + clamp(330px,31vw,470px));right:var(--gutter);top:calc(var(--ay) + 76px);max-width:720px}
 .xmb-art{position:relative;aspect-ratio:2.2;width:min(100%,(var(--h) - var(--ay) - 340px) * 2.2);min-width:260px;background:var(--ink);box-shadow:0 0 0 1px #ffffff40,0 20px 56px #050d3aa6}
 .xmb-art img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .4s}
 .xmb-art.is-cut img{transition:none}
@@ -267,11 +219,39 @@ footer{text-align:center;padding:0 16px 40px;color:var(--on-sea-muted);font-size
 .xmb-copy{min-height:36px;min-width:5.2rem;padding:0 14px;font-size:.9rem}
 .xmb-open{margin-top:20px}
 
+/* pages: opening one slides the menu aside into a rail of icons and brings the page in beside it */
+.xmb-pages{position:absolute;z-index:1;inset:96px var(--gutter) 76px clamp(236px,19vw,330px);overflow-y:auto;visibility:hidden;opacity:var(--depth, 0);transform:translateX(calc((1 - var(--depth, 0)) * 72px));scrollbar-color:#ffffff66 transparent}
+.xmb.page-live .xmb-pages{visibility:visible}
+.xmb.has-page .xmb-detail{pointer-events:none}
+.xmb-back{min-height:36px;margin-bottom:22px;padding:0 16px 0 12px;gap:6px;font-size:.9rem}
+.xmb-back svg{width:14px;height:14px}
+.xmb-page{max-width:900px}
+.xmb-page h2{margin:0 0 24px;padding-bottom:16px;border-bottom:1px solid #ffffff59;font-size:clamp(1.9rem,1.45rem + 1.3vw,2.7rem);font-weight:300;line-height:1.15;letter-spacing:.005em}
+.xmb-page h2:focus{outline:none}
+.xmb-lede{max-width:62ch;margin:0 0 30px;font-size:1.12rem;line-height:1.7}
+.xmb-facts{display:grid;grid-template-columns:auto 1fr;gap:.55rem 2rem;max-width:640px;margin:0}
+.xmb-facts div{display:contents}
+.xmb-facts dt{font-weight:300;opacity:.82}
+.xmb-facts dd{margin:0}
+.xmb-gear{list-style:none;margin:0;padding:0}
+.xmb-gear li{display:grid;grid-template-columns:minmax(0,15rem) 1fr;gap:.2rem 2rem;align-items:baseline;padding:.85rem 0;border-bottom:1px solid #ffffff2e}
+.xmb-gear b{font-size:1.4rem;font-weight:300;line-height:1.25}
+.xmb-gear span{line-height:1.6}
+.xmb-saves{list-style:none;display:grid;grid-template-columns:repeat(4,1fr);gap:0 28px;margin:34px 0 0;padding:0}
+.xmb-saves li{position:relative;padding-top:26px;border-top:1px solid #ffffff73;line-height:1.6}
+.xmb-saves li::before{content:"";position:absolute;left:0;top:-6px;width:11px;height:11px;border-radius:50%;background:#fff;box-shadow:0 0 12px #ffffffb3}
+.xmb-year{display:block;margin-bottom:.35rem;font-size:2.2rem;font-weight:300;line-height:1.1;font-variant-numeric:tabular-nums}
+.xmb-now{display:inline-block;margin-bottom:.5rem;padding:.1rem .7rem;border:1px solid #ffffff8c;border-radius:999px;font-size:.84rem}
+.warp{color:#fff;font-weight:400;white-space:nowrap;text-decoration:underline dotted #ffffffb8 1px;text-underline-offset:.3em}
+.warp:hover{text-decoration-style:solid}
+
 .xmb-legend{position:absolute;z-index:2;inset:auto auto 16px var(--gutter);display:flex;align-items:center;gap:8px 28px;font-size:.9rem;font-weight:300}
 .xmb-keys{display:flex;flex-wrap:wrap;gap:4px 22px;margin:0}
 .xmb-keys span{display:inline-flex;align-items:center;gap:5px}
+.xmb-keys-page,.xmb.has-page .xmb-keys-menu{display:none}
+.xmb.has-page .xmb-keys-page{display:flex}
 .xmb-legend kbd{min-width:1.7em;padding:1px 6px;border:1px solid #ffffff80;border-radius:4px;font:400 .8rem/1.5 var(--ui);text-align:center}
-.xmb-motion{min-height:44px;padding:0;border:0;background:none;color:inherit;font:inherit;text-shadow:inherit;text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:.3em;cursor:pointer}
+.xmb-toggle{min-height:44px;padding:0;border:0;background:none;color:inherit;font:inherit;text-shadow:inherit;text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:.3em;cursor:pointer}
 
 @media (max-width:899px){
   .xmb{--ax:92px;--ay:150px;--step:100px;--box:104px;--row:54px;--cur-y:124px;--below-y:198px;--above-y:-82px;height:auto;min-height:100svh;display:flex;flex-direction:column}
@@ -290,13 +270,24 @@ footer{text-align:center;padding:0 16px 40px;color:var(--on-sea-muted);font-size
   .xmb-desc,.xmb-detail.no-art .xmb-desc{max-width:60ch;margin-top:16px;font-size:1.05rem;font-weight:400;line-height:1.55}
   .xmb-open{margin-top:16px}
   .xmb-legend{position:relative;inset:auto;justify-content:flex-end;margin-top:auto;padding:14px 20px 12px}
+  .xmb-cross{opacity:1;transform:none}
+  .xmb-detail{opacity:1;transform:none}
+  .xmb.has-page .xmb-cross,.xmb.has-page .xmb-detail{display:none}
+  .xmb-pages{position:relative;inset:auto;display:none;overflow:visible;visibility:visible;opacity:1;transform:none;padding:78px 20px 8px}
+  .xmb.has-page .xmb-pages{display:block;animation:xmb-page-in .4s var(--ease)}
+  .xmb-gear li{grid-template-columns:1fr}
+  .xmb-saves{grid-template-columns:1fr;gap:0;margin:22px 0 0 5px}
+  .xmb-saves li{padding:0 0 26px 26px;border-top:0;border-left:1px solid #ffffff73}
+  .xmb-saves li:last-child{padding-bottom:4px}
+  .xmb-saves li::before{left:-6px;top:10px}
 }
-@media (pointer:coarse){.xmb-keys{display:none}}
+@keyframes xmb-page-in{from{opacity:0;transform:translateX(36px)}}
+@media (pointer:coarse){.xmb .xmb-keys,.xmb.has-page .xmb-keys-page{display:none}}
 </style>
 </head>
 <body id="top">
 
-<section class="xmb" id="console" aria-labelledby="console-title" hidden>
+<main class="xmb" id="console" aria-labelledby="console-title" hidden>
   <canvas class="xmb-wave" id="xmb-wave" aria-hidden="true"></canvas>
   <header class="xmb-top">
     <h1 class="xmb-brand" id="console-title">Bombatomica64</h1>
@@ -325,14 +316,19 @@ footer{text-align:center;padding:0 16px 40px;color:var(--on-sea-muted);font-size
     </div>
     </div>
   </article>
+  <div class="xmb-pages" id="xmb-pages" inert>
+    <button class="xmb-btn xmb-back" id="xmb-back" type="button"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M10 3 5 8l5 5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>Back</button>
+  </div>
   <footer class="xmb-legend">
-    <p class="xmb-keys"><span><kbd>←</kbd><kbd>→</kbd> Sections</span><span><kbd>↑</kbd><kbd>↓</kbd> Items</span><span><kbd>Enter</kbd> Open</span></p>
-    <button class="xmb-motion" id="xmb-motion" type="button">Pause motion</button>
+    <p class="xmb-keys xmb-keys-menu"><span><kbd>←</kbd><kbd>→</kbd> Sections</span><span><kbd>↑</kbd><kbd>↓</kbd> Items</span><span><kbd>Enter</kbd> Open</span></p>
+    <p class="xmb-keys xmb-keys-page"><span><kbd>Esc</kbd> Back</span></p>
+    <button class="xmb-toggle" id="xmb-motion" type="button">Pause motion</button>
+    <button class="xmb-toggle" id="xmb-sound" type="button">Turn sound on</button>
   </footer>
-</section>
+</main>
 
-<div class="stage" id="stage">
-  <svg id="map" role="img" aria-label="World map of Lorenzo's projects: four islands, sixteen levels connected by a dotted path." preserveAspectRatio="xMidYMid meet"></svg>
+<div class="stage" id="stage" hidden>
+  <svg id="map" role="img" aria-label="World map of Lorenzo's projects: six islands, twenty-nine levels connected by a dotted path." preserveAspectRatio="xMidYMid meet"></svg>
 
   <header class="hud">
     <a class="brand" href="#top" aria-label="Bombatomica64 home">
@@ -343,7 +339,7 @@ footer{text-align:center;padding:0 16px 40px;color:var(--on-sea-muted);font-size
     <nav class="hud-actions" aria-label="World map">
       <button class="btn" id="open-console" type="button" aria-label="Console" hidden><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M1 5h14M5 1.500v13" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><rect x="3" y="3" width="4" height="4" rx="1" fill="currentColor"/></svg><span class="lbl">Console</span></button>
       <button class="btn" id="mapBtn" type="button" aria-label="Map overview" aria-pressed="false"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M1 3l4.5-1.5 5 1.5L15 1.5v11.5L10.5 14.5 5.5 13 1 14.5z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M5.5 1.5v11.5M10.5 3v11.5" stroke="currentColor" stroke-width="1.6"/></svg><span class="lbl">Map</span></button>
-      <a class="btn" href="#profile" aria-label="Player file"><svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="5" r="3" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M2 15c.8-3.4 3.2-5 6-5s5.2 1.6 6 5" fill="none" stroke="currentColor" stroke-width="1.6"/></svg><span class="lbl">Player file</span></a>
+      <button class="btn" id="hud-profile" type="button" aria-label="Player file"><svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="5" r="3" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M2 15c.8-3.4 3.2-5 6-5s5.2 1.6 6 5" fill="none" stroke="currentColor" stroke-width="1.6"/></svg><span class="lbl">Player file</span></button>
     </nav>
   </header>
 
@@ -375,78 +371,54 @@ footer{text-align:center;padding:0 16px 40px;color:var(--on-sea-muted);font-size
       <h1>BOMBATOMICA<span>64</span></h1>
       <p>Lorenzo Micheli. Trained at 42 on C, writing Rust for fun, keeping containers alive at Instal.</p>
       <button class="btn go start" id="start" type="button"><span class="blink">Press start</span></button>
-      <small>or press Enter · sixteen levels across four worlds</small>
+      <small>or press Enter · twenty-nine levels across six worlds</small>
     </div>
   </div>
 </div>
 
-<main>
-  <section class="page" id="profile">
-    <div class="profile">
-      <svg viewBox="0 0 120 120" aria-hidden="true">
-        <circle cx="56" cy="64" r="48" fill="#11277a"/>
-        <circle cx="54" cy="70" r="38" fill="#0c0f2e"/>
-        <circle cx="40" cy="56" r="11" fill="#3a67ee"/><circle cx="36" cy="52" r="4" fill="#e6efff"/>
-        <circle cx="46" cy="76" r="5" fill="#fff8e8"/><circle cx="66" cy="76" r="5" fill="#fff8e8"/>
-        <circle cx="47" cy="77" r="2.4" fill="#0c0f2e"/><circle cx="67" cy="77" r="2.4" fill="#0c0f2e"/>
-        <path d="M50 88q6 4 12 0" stroke="#fff8e8" stroke-width="2.5" fill="none" stroke-linecap="round"/>
-        <rect x="66" y="26" width="22" height="16" rx="5" transform="rotate(35 77 34)" fill="#0c0f2e"/>
-        <path d="M82 24c6-12 18-12 22-4" stroke="#fff8e8" stroke-width="5" fill="none" stroke-linecap="round"/>
-        <g class="spark"><path d="M106 6l3 9 9 3-9 3-3 9-3-9-9-3 9-3z" fill="#ffd23f"/></g>
-      </svg>
-      <div>
-        <h2>Player file</h2>
-        <p class="lede">I'm Lorenzo, online as Bombatomica64. I learned to program the hard way at 42, writing shells, raycasters and IRC servers in C and C++. These days I write Rust on the side, work at Instal on Price Ninja, where I run Docker, Kubernetes and CI/CD alongside Django and Angular, and build small tools that make AI agents and my own desktop behave.</p>
-        <ul>
-          <li><span class="k">Class</span><span>Developer · DevOps tinkerer</span></li>
-          <li><span class="k">Guild</span><span>Instal · Price Ninja</span></li>
-          <li><span class="k">Main</span><span>Rust, C, C++, TypeScript, Python</span></li>
-          <li><span class="k">Training</span><span>42 school curriculum</span></li>
-          <li><span class="k">Side quest</span><span>Anime, and automating anything that repeats twice</span></li>
-        </ul>
-      </div>
-    </div>
+<div class="pages" id="pages">
+  <section class="xmb-page" id="profile" aria-labelledby="profileH">
+    <h2 id="profileH" tabindex="-1">Player file</h2>
+    <p class="xmb-lede">I'm Lorenzo, online as Bombatomica64. I learned to program the hard way at 42, writing shells, raycasters and IRC servers in C and C++. These days I write Rust on the side, work at Instal on Price Ninja, where I run Docker, Kubernetes and CI/CD alongside Django and Angular, and build small tools that make AI agents and my own desktop behave.</p>
+    <dl class="xmb-facts">
+      <div><dt>Class</dt><dd>Developer and DevOps tinkerer</dd></div>
+      <div><dt>Guild</dt><dd>Instal, on Price Ninja</dd></div>
+      <div><dt>Main</dt><dd>Rust, C, C++, TypeScript, Python</dd></div>
+      <div><dt>Training</dt><dd>42 school curriculum</dd></div>
+      <div><dt>Side quest</dt><dd>Anime, and automating anything that repeats twice</dd></div>
+    </dl>
   </section>
 
-  <section class="page" id="inventory" aria-labelledby="invH">
-    <h2 id="invH">Inventory</h2>
-    <p class="lede">Gear picked up along the way, and where it gets used. Underlined names warp to that level on the map.</p>
-    <ul class="gear">
-      <li><b>Rust</b><span class="uses"><a class="warp" href="#top" data-lv="smelt">smelt</a>, <a class="warp" href="#top" data-lv="cargo-gpui">cargo-gpui</a>, <a class="warp" href="#top" data-lv="GPUI Mobile Lab">GPUI on Android</a>, <a class="warp" href="#top" data-lv="matrix">matrix</a></span></li>
-      <li><b>C / C++</b><span class="uses"><a class="warp" href="#top" data-lv="minishell">minishell</a>, <a class="warp" href="#top" data-lv="CUB3D">CUB3D</a>, <a class="warp" href="#top" data-lv="so_long">so_long</a>, <a class="warp" href="#top" data-lv="ft_irc">ft_irc</a>, <a class="warp" href="#top" data-lv="slack-sidebar">Noctalia widgets</a></span></li>
-      <li><b>TypeScript · Angular</b><span class="uses"><a class="warp" href="#top" data-lv="agent-board">agent-board</a> (Angular 22 SSR), web front-ends</span></li>
-      <li><b>Python · Django</b><span class="uses">dslr, linear regression, back-ends, <a class="warp" href="#top" data-lv="unit-to-e2e-tests">agent skills</a></span></li>
-      <li><b>Docker · Kubernetes</b><span class="uses">Inception, Inception-of-Things, Price Ninja in production</span></li>
-      <li><b>CI/CD</b><span class="uses">pipelines, self-hosted runners, <a class="warp" href="#top" data-lv="matrix">coverage bots</a></span></li>
+  <section class="xmb-page" id="inventory" aria-labelledby="invH">
+    <h2 id="invH" tabindex="-1">Inventory</h2>
+    <p class="xmb-lede">Gear picked up along the way, and where it gets used. Underlined names jump to that project.</p>
+    <ul class="xmb-gear">
+      <li><b>Rust</b><span><a class="warp" href="#smelt">smelt</a>, <a class="warp" href="#cargo-gpui">cargo-gpui</a>, <a class="warp" href="#gpui-mobile-lab">GPUI on Android</a>, <a class="warp" href="#gpui-pre">gpui-pre</a>, <a class="warp" href="#spotifast-karaoke">Spotifast Karaoke</a>, <a class="warp" href="#matrix">matrix</a></span></li>
+      <li><b>C and C++</b><span><a class="warp" href="#minishell">minishell</a>, <a class="warp" href="#cub3d">CUB3D</a>, <a class="warp" href="#so_long">so_long</a>, <a class="warp" href="#push_swap">push_swap</a>, <a class="warp" href="#ft_irc">ft_irc</a>, <a class="warp" href="#slack-sidebar">Noctalia widgets</a></span></li>
+      <li><b>TypeScript and Angular</b><span><a class="warp" href="#agent-board">agent-board</a> on Angular 22 SSR, <a class="warp" href="#simple-menu">Simple Menu</a>, <a class="warp" href="#wordle">Wordle</a>, <a class="warp" href="#42-matcha">42-matcha</a></span></li>
+      <li><b>Python and Django</b><span><a class="warp" href="#dslr">dslr</a>, <a class="warp" href="#ft_linear_regression">ft_linear_regression</a>, <a class="warp" href="#unit-to-e2e-tests">agent skills</a>, back ends at Instal</span></li>
+      <li><b>Docker and Kubernetes</b><span><a class="warp" href="#inception">inception</a>, <a class="warp" href="#inceptionofthings">inceptionOfThings</a>, Price Ninja in production</span></li>
+      <li><b>CI/CD</b><span>pipelines, self-hosted runners, <a class="warp" href="#matrix">coverage bots</a></span></li>
     </ul>
   </section>
 
-  <section class="page" id="saves" aria-labelledby="saveH">
-    <h2 id="saveH">Save points</h2>
-    <p class="lede">The run so far, by year of last activity on GitHub.</p>
-    <ol class="saves">
-      <li><svg class="pin" viewBox="-28 -28 56 56" aria-hidden="true"><circle r="24" cy="4" fill="#efe2c2"/><circle r="24" fill="#fff8e8"/><path d="M0,-11 L3.2,-3.6 11,-3.4 4.8,1.6 7,9.4 0,5 -7,9.4 -4.8,1.6 -11,-3.4 -3.2,-3.6Z" fill="#0c0f2e"/></svg><span class="yr">2023</span><span class="what">First steps at 42: <a class="warp" href="#top" data-lv="so_long">so_long</a>, <a class="warp" href="#top" data-lv="pipex">pipex</a>.</span></li>
-      <li><svg class="pin" viewBox="-28 -28 56 56" aria-hidden="true"><circle r="24" cy="4" fill="#efe2c2"/><circle r="24" fill="#fff8e8"/><path d="M0,-11 L3.2,-3.6 11,-3.4 4.8,1.6 7,9.4 0,5 -7,9.4 -4.8,1.6 -11,-3.4 -3.2,-3.6Z" fill="#0c0f2e"/></svg><span class="yr">2024</span><span class="what"><a class="warp" href="#top" data-lv="philo">philo</a>, <a class="warp" href="#top" data-lv="CUB3D">CUB3D</a> raycaster, Inception with Docker.</span></li>
-      <li><svg class="pin" viewBox="-28 -28 56 56" aria-hidden="true"><circle r="24" cy="4" fill="#efe2c2"/><circle r="24" fill="#fff8e8"/><path d="M0,-11 L3.2,-3.6 11,-3.4 4.8,1.6 7,9.4 0,5 -7,9.4 -4.8,1.6 -11,-3.4 -3.2,-3.6Z" fill="#0c0f2e"/></svg><span class="yr">2025</span><span class="what"><a class="warp" href="#top" data-lv="minishell">minishell</a>, <a class="warp" href="#top" data-lv="ft_irc">ft_irc</a>, Inception-of-Things on Kubernetes, TypeScript side projects, linear regression.</span></li>
-      <li><svg class="pin" viewBox="-28 -28 56 56" aria-hidden="true"><circle class="ring" r="26" fill="none" stroke="#ffd23f" stroke-width="4"/><circle r="24" cy="4" fill="#b8360f"/><circle r="24" fill="#ff5a2a"/><rect x="-6" y="-13" width="3.5" height="26" rx="1.5" fill="#0c0f2e"/><path d="M-2.5,-13 L12,-7.5 L-2.5,-2Z" fill="#fff8e8"/></svg><span class="yr">2026</span><span class="now">Current save</span><span class="what"><a class="warp" href="#top" data-lv="smelt">smelt</a>, <a class="warp" href="#top" data-lv="cargo-gpui">cargo-gpui</a>, <a class="warp" href="#top" data-lv="GPUI Mobile Lab">GPUI on Android</a>, <a class="warp" href="#top" data-lv="zed-practice">zed-practice</a>, <a class="warp" href="#top" data-lv="agent-board">agent-board</a>, <a class="warp" href="#top" data-lv="slidesmith">slidesmith</a>, <a class="warp" href="#top" data-lv="slack-sidebar">Noctalia sidebars</a>.</span></li>
+  <section class="xmb-page" id="saves" aria-labelledby="saveH">
+    <h2 id="saveH" tabindex="-1">Save points</h2>
+    <p class="xmb-lede">The run so far, by year of last activity on GitHub.</p>
+    <ol class="xmb-saves">
+      <li><span class="xmb-year">2023</span>First steps at 42: <a class="warp" href="#so_long">so_long</a>, <a class="warp" href="#pipex">pipex</a>, <a class="warp" href="#push_swap">push_swap</a>.</li>
+      <li><span class="xmb-year">2024</span><a class="warp" href="#philo">philo</a> and <a class="warp" href="#philo_bonus">philo_bonus</a>, the <a class="warp" href="#cub3d">CUB3D</a> raycaster, the <a class="warp" href="#cpp">C++ modules</a>, <a class="warp" href="#inception">inception</a> with Docker.</li>
+      <li><span class="xmb-year">2025</span><a class="warp" href="#minishell">minishell</a>, <a class="warp" href="#ft_irc">ft_irc</a>, <a class="warp" href="#hotrace">hotrace</a>, <a class="warp" href="#inceptionofthings">inceptionOfThings</a> on Kubernetes, <a class="warp" href="#wordle">Wordle</a>, <a class="warp" href="#simple-menu">Simple Menu</a>, <a class="warp" href="#ft_linear_regression">ft_linear_regression</a>.</li>
+      <li><span class="xmb-year">2026</span><span class="xmb-now">Current save</span><br><a class="warp" href="#smelt">smelt</a>, <a class="warp" href="#cargo-gpui">cargo-gpui</a>, <a class="warp" href="#gpui-mobile-lab">GPUI on Android</a>, <a class="warp" href="#zed-practice">zed-practice</a>, <a class="warp" href="#agent-board">agent-board</a>, <a class="warp" href="#slidesmith">slidesmith</a>, <a class="warp" href="#slack-sidebar">Noctalia sidebars</a>, <a class="warp" href="#spotifast-karaoke">Spotifast Karaoke</a>, <a class="warp" href="#dslr">dslr</a>, <a class="warp" href="#42-matcha">42-matcha</a>.</li>
     </ol>
   </section>
-
-  <section class="page credits" aria-labelledby="credH">
-    <h2 class="roll" id="credH">Thanks for playing</h2>
-    <p>Continue? The code lives on GitHub; the rest is a DM away.</p>
-    <div class="links">
-      <a class="btn go" href="https://github.com/Bombatomica64" target="_blank" rel="noopener">GitHub</a>
-      <a class="btn" href="https://instagram.com/lorenzo.micheli01" target="_blank" rel="noopener">Instagram</a>
-    </div>
-  </section>
-</main>
-<footer>© 2026 Lorenzo Micheli · bombatomica64.dev</footer>
+</div>
+<footer class="foot">© 2026 Lorenzo Micheli. Code on <a href="https://github.com/Bombatomica64">GitHub</a>, the rest on <a href="https://instagram.com/lorenzo.micheli01">Instagram</a>.</footer>
 
 <script>
 (() => {
 const NS = 'http://www.w3.org/2000/svg';
-const W = 1600, H = 1000;
+const W = 2150, H = 1000;
 const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
 const svg = document.getElementById('map');
 const el = (t, a = {}, p) => { const e = document.createElementNS(NS, t); for (const k in a) e.setAttribute(k, a[k]); if (p) p.appendChild(e); return e; };
@@ -462,35 +434,51 @@ const C = n => getComputedStyle(document.documentElement).getPropertyValue('--' 
 
 const GH = 'https://github.com/Bombatomica64/';
 const worlds = [
-  { name: 'Piscine Isles', lang: 'C · 42 school', cx: 320, cy: 640, rx: 270, ry: 205, seed: 11, kind: 'grass', label: [320, 395] },
+  { name: 'Piscine Isles', lang: 'C · 42 school', cx: 330, cy: 690, rx: 300, ry: 250, seed: 11, kind: 'grass', label: [300, 405], trees: 18 },
   { name: 'Ferrous Peak', lang: 'Rust', cx: 830, cy: 390, rx: 310, ry: 215, seed: 29, kind: 'rock', label: [830, 135] },
-  { name: 'Bar Reef', lang: 'Desktop widgets', cx: 1395, cy: 235, rx: 160, ry: 110, seed: 5, kind: 'grass', label: [1395, 85] },
-  { name: 'Agent Harbor', lang: 'AI agent tooling', cx: 1220, cy: 715, rx: 255, ry: 180, seed: 47, kind: 'grass', label: [1220, 940] },
+  { name: 'Bar Reef', lang: 'Desktop widgets', cx: 1395, cy: 235, rx: 160, ry: 110, seed: 5, kind: 'grass', label: [1395, 85], trees: 4, keep: [1395, 200, 50] },
+  { name: 'Agent Harbor', lang: 'AI agent tooling', cx: 1220, cy: 715, rx: 255, ry: 180, seed: 47, kind: 'grass', label: [1220, 940], trees: 14 },
+  { name: 'Cluster Cay', lang: 'Data and infrastructure', cx: 1850, cy: 740, rx: 260, ry: 150, seed: 61, kind: 'grass', label: [1850, 945], trees: 10, keep: [1773, 690, 75] },
+  { name: 'Browser Bay', lang: 'Web apps', cx: 1850, cy: 300, rx: 210, ry: 120, seed: 83, kind: 'grass', label: [1850, 140], trees: 7, keep: [1845, 245, 50] },
 ];
+/* `la` puts a level's label above its disc, for levels the path reaches from below */
 const levels = [
-  { w: 0, x: 170, y: 640, t: 'so_long', d: 'A tiny 2D game in C on MiniLibX: collect every item, reach the exit, avoid the patrols.', lang: 'C', st: 'done', url: GH + 'so_long' },
-  { w: 0, x: 295, y: 765, t: 'pipex', d: 'Rebuilds the shell pipe: < in cmd1 | cmd2 > out, with fork, dup2 and execve.', lang: 'C', st: 'done', url: GH + 'Pipex' },
-  { w: 0, x: 440, y: 715, t: 'philo', d: 'The dining philosophers with threads and mutexes. Nobody starves, nobody races.', lang: 'C', st: 'done', url: GH + 'philo' },
-  { w: 0, x: 330, y: 600, t: 'CUB3D', d: 'A first-person raycaster in C: textured walls, a minimap, a 3D maze loaded from a text file.', lang: 'C', st: 'done', url: GH + 'CUB3D' },
-  { w: 0, x: 225, y: 505, t: 'minishell', d: 'A bash-like shell in C: parsing, quotes, redirections, pipes, heredocs and signals.', lang: 'C', st: 'done', url: GH + 'minishell' },
-  { w: 0, x: 430, y: 520, t: 'ft_irc', d: 'An IRC server in C++98 that real IRC clients can connect to, chat and join channels on.', lang: 'C++', st: 'done', url: GH + 'ft_irc' },
-  { w: 1, x: 610, y: 440, t: 'matrix', d: 'Generic N-D matrix and vector algebra in Rust, with coverage tables rewritten by CI on every push.', lang: 'Rust', st: 'done', url: GH + 'matrix' },
-  { w: 1, x: 725, y: 530, t: 'smelt', d: 'Smelts strictly-typed TypeScript and Python into idiomatic Rust through one shared IR. Pre-alpha, on crates.io.', code: 'cargo install --locked smelt-transpiler', lang: 'Rust', st: 'wip', url: GH + 'smelt' },
-  { w: 1, x: 905, y: 535, t: 'zed-practice', d: 'A LeetCode-style practice panel inside Zed: local problems, hidden tests, timing and Big-O estimates.', lang: 'Rust', st: 'wip', url: GH + 'zed-practice' },
+  { w: 0, x: 200, y: 820, t: 'so_long', d: 'A tiny 2D game in C on MiniLibX: collect every item, reach the exit, avoid the patrols.', lang: 'C', st: 'done', url: GH + 'so_long' },
+  { w: 0, x: 350, y: 820, t: 'pipex', d: 'Rebuilds the shell pipe: < in cmd1 | cmd2 > out, with fork, dup2 and execve.', lang: 'C', st: 'done', url: GH + 'Pipex' },
+  { w: 0, x: 490, y: 820, t: 'push_swap', d: 'Sorts a stack of integers using only swap, push, rotate and reverse-rotate, and prints the instructions it used.', lang: 'C', st: 'wip', url: GH + 'Push_swap' },
+  { w: 0, x: 540, y: 690, t: 'philo', d: 'The dining philosophers with threads and mutexes. Nobody starves, nobody races.', lang: 'C', st: 'done', url: GH + 'philo' },
+  { w: 0, x: 400, y: 690, t: 'philo_bonus', d: 'The dining philosophers again, with processes and semaphores: one process per philosopher, the forks a shared semaphore.', lang: 'C', st: 'done', url: GH + 'philo_bonus' },
+  { w: 0, x: 250, y: 690, t: 'CUB3D', d: 'A first-person raycaster in C: textured walls, a minimap, a 3D maze loaded from a text file.', lang: 'C', st: 'done', url: GH + 'CUB3D' },
+  { w: 0, x: 110, y: 690, t: 'minishell', d: 'A bash-like shell in C: parsing, quotes, redirections, pipes, heredocs and signals.', lang: 'C', st: 'done', url: GH + 'minishell' },
+  { w: 0, x: 170, y: 560, t: 'CPP', d: 'The 42 C++ modules 00 to 09, exercise by exercise: classes, inheritance, casts, templates and the STL containers.', lang: 'C++', st: 'done', url: GH + 'CPP' },
+  { w: 0, x: 330, y: 560, t: 'hotrace', d: 'Reads key and value pairs, then answers each lookup from a hash table. Built for speed, with 1 MB chunked reads.', lang: 'C', st: 'done', url: GH + 'hotrace' },
+  { w: 0, x: 480, y: 560, t: 'ft_irc', d: 'An IRC server in C++98 that real IRC clients can connect to, chat and join channels on.', lang: 'C++', st: 'done', url: GH + 'ft_irc' },
+  { w: 1, x: 645, y: 305, t: 'Spotifast Karaoke', d: 'A floating lyrics panel for Spotifast on Linux: the current and next synced line from LRCLIB, a progress bar, playback buttons.', lang: 'Rust', st: 'done', url: GH + 'spotifast-karaoke' },
+  { w: 1, x: 680, y: 475, t: 'matrix', d: 'Generic N-D matrix and vector algebra in Rust, with coverage tables rewritten by CI on every push.', lang: 'Rust', st: 'done', url: GH + 'matrix' },
+  { w: 1, x: 790, y: 545, t: 'smelt', d: 'Smelts strictly-typed TypeScript and Python into idiomatic Rust through one shared IR. Pre-alpha, on crates.io.', code: 'cargo install --locked smelt-transpiler', lang: 'Rust', st: 'wip', url: GH + 'smelt' },
+  { w: 1, x: 920, y: 535, t: 'zed-practice', d: 'A LeetCode-style practice panel inside Zed: local problems, hidden tests, timing and Big-O estimates.', lang: 'Rust', st: 'wip', url: GH + 'zed-practice' },
   { w: 1, x: 1050, y: 450, t: 'cargo-gpui', d: 'Dev loop for GPUI apps on Android: Rust hot patching with Subsecond, reloads without reinstalling.', lang: 'Rust', st: 'wip', url: GH + 'cargo-gpui' },
-  { w: 1, x: 1020, y: 310, t: 'GPUI Mobile Lab', d: 'Every GPUI Kit component on an Android phone, with an event log per screen and touch fixes carried in forks.', lang: 'Rust', st: 'wip', url: GH + 'Gpui-android' },
+  { w: 1, x: 1040, y: 345, t: 'gpui-pre', d: "A crates.io snapshot of Zed's GPUI with touch fixes for GPUI Kit on Android, one branch per fix, combined on mobile-lab.", lang: 'Rust', st: 'wip', url: GH + 'gpui-pre' },
+  { w: 1, x: 965, y: 262, t: 'GPUI Mobile Lab', d: 'Every GPUI Kit component on an Android phone, with an event log per screen and touch fixes carried in forks.', lang: 'Rust', st: 'wip', url: GH + 'Gpui-android' },
   { w: 2, x: 1320, y: 270, t: 'slack-sidebar', d: 'Slack in a full-height Noctalia sidebar: conversations, threads, reactions, custom emoji, OAuth2 sign-in.', lang: 'C++', st: 'done', url: GH + 'slack-sidebar' },
   { w: 2, x: 1465, y: 255, t: 'linear-sidebar', d: 'Linear issues and projects in the Noctalia bar, read from a local SQLite cache.', lang: 'Luau', st: 'done', url: GH + 'linear-sidebar' },
-  { w: 3, x: 1360, y: 625, t: 'agent-board', d: 'A bulletin board where Claude and Codex agents claim tasks atomically across repos. Angular 22 SSR, node:sqlite, CLI.', lang: 'TypeScript', st: 'wip', url: GH + 'agent-board' },
-  { w: 3, x: 1225, y: 690, t: 'slidesmith', d: 'An agent skill that writes topic-bespoke HTML slide decks instead of filling a template.', code: 'npx skills add Bombatomica64/slidesmith', lang: 'HTML', st: 'done', url: GH + 'slidesmith' },
-  { w: 3, x: 1095, y: 760, t: 'unit-to-e2e-tests', d: 'An agent skill that trades a pile of unit tests for fewer end-to-end ones, keeping coverage file by file.', lang: 'Python', st: 'done', url: GH + 'unit-to-e2e-tests' },
+  { w: 3, x: 1340, y: 640, t: 'agent-board', d: 'A bulletin board where Claude and Codex agents claim tasks atomically across repos. Angular 22 SSR, node:sqlite, CLI.', lang: 'TypeScript', st: 'wip', url: GH + 'agent-board' },
+  { w: 3, x: 1160, y: 660, t: 'slidesmith', d: 'An agent skill that writes topic-bespoke HTML slide decks instead of filling a template.', code: 'npx skills add Bombatomica64/slidesmith', lang: 'HTML', st: 'done', url: GH + 'slidesmith' },
+  { w: 3, x: 1280, y: 800, t: 'unit-to-e2e-tests', d: 'An agent skill that trades a pile of unit tests for fewer end-to-end ones, keeping coverage file by file.', lang: 'Python', st: 'done', url: GH + 'unit-to-e2e-tests' },
+  { w: 4, x: 1690, y: 790, t: 'inception', d: 'A WordPress, MariaDB and nginx stack on TLS, each service built from its own hand-written Dockerfile with docker compose.', lang: 'Docker', st: 'done', url: GH + 'Inception' },
+  { w: 4, x: 1840, y: 800, t: 'inceptionOfThings', d: 'Two Vagrant VMs form a K3s server and agent, with Helm charts for three ingress-routed apps and an Argo CD chart.', lang: 'Kubernetes', st: 'done', url: GH + 'inceptionOfThings' },
+  { w: 4, x: 1990, y: 760, t: 'ft_linear_regression', d: "Predicts a car's price from its mileage with a linear regression trained by gradient descent, plus plots of the fit and the loss.", lang: 'Python', st: 'done', url: GH + 'ft_linear_regression' },
+  { w: 4, x: 1880, y: 650, t: 'dslr', d: 'One-vs-all logistic regression that sorts Hogwarts students into houses, with mean, std and quantiles written by hand.', lang: 'Python', st: 'done', url: GH + 'dslr' },
+  { w: 5, x: 1730, y: 330, la: true, t: 'Wordle', d: 'A Wordle clone in Angular: guess a five-letter word in six tries from a 12,971-word list, with an on-screen keyboard.', lang: 'TypeScript', st: 'done', url: GH + 'Wordle' },
+  { w: 5, x: 1850, y: 355, t: 'Simple Menu', d: 'A digital restaurant menu with live updates: Angular 20 front end, Express and WebSocket back end with Prisma, a slideshow mode.', lang: 'TypeScript', st: 'done', url: GH + 'Simple-menu' },
+  { w: 5, x: 1970, y: 320, t: '42-matcha', d: 'A dating web app for the 42 Matcha project: profiles, GPS matching, an Angular front end, an Express API on Postgres.', lang: 'TypeScript', st: 'wip', url: GH + '42-matcha' },
 ];
 
 /* ---------- draw the world ---------- */
 const gSea = el('g', {}, svg);
 el('rect', { x: -3000, y: -3000, width: 7600, height: 7000, fill: C('sea') }, gSea);
 { const r = rng(3);
-  for (let i = 0; i < 70; i++) { const x = -300 + r() * 2200, y = -200 + r() * 1400;
+  for (let i = 0; i < 95; i++) { const x = -300 + r() * (W + 600), y = -200 + r() * 1400;
     el('path', { class: 'wave', d: `M${x},${y} q10,-8 20,0 q10,8 20,0`, stroke: C('foam'), 'stroke-width': 3, fill: 'none', 'stroke-linecap': 'round', style: `animation-delay:${(-r() * 4).toFixed(2)}s` }, gSea); } }
 
 const gLand = el('g', {}, svg);
@@ -513,9 +501,9 @@ worlds.forEach((w, i) => {
 /* trees on the green islands */
 const near = (x, y, d) => levels.some(l => Math.hypot(l.x - x, l.y - y) < d);
 worlds.forEach((w, wi) => { if (w.kind === 'rock') return; const r = rng(w.seed * 7);
-  for (let i = 0, made = 0; i < 300 && made < (wi === 2 ? 4 : 14); i++) {
+  for (let i = 0, made = 0; i < 300 && made < w.trees; i++) {
     const a = r() * Math.PI * 2, k = Math.sqrt(r()) * .62, x = w.cx + Math.cos(a) * w.rx * k, y = w.cy + Math.sin(a) * w.ry * k;
-    if (near(x, y, 58) || (wi === 2 && Math.hypot(x - 1395, y - 200) < 50)) continue; made++;
+    if (near(x, y, 58) || (w.keep && Math.hypot(x - w.keep[0], y - w.keep[1]) < w.keep[2])) continue; made++;
     const s = .8 + r() * .5, t = el('g', { transform: `translate(${x.toFixed(1)},${y.toFixed(1)}) scale(${s.toFixed(2)})` }, gDeco);
     el('ellipse', { cx: 0, cy: 14, rx: 14, ry: 5, fill: C('grass-dk'), opacity: .8 }, t);
     el('rect', { x: -3, y: 0, width: 6, height: 14, rx: 2, fill: C('rock') }, t);
@@ -541,7 +529,7 @@ worlds.forEach((w, wi) => { if (w.kind === 'rock') return; const r = rng(w.seed 
   el('path', { d: 'M1380,152 L1395,138 L1410,152Z', fill: C('ink') }, L); }
 
 /* Agent Harbor pier + boat */
-{ const P = el('g', {}, gDeco);
+{ const P = el('g', { transform: 'translate(2440,0) scale(-1,1)' }, gDeco);
   el('rect', { x: 1300, y: 780, width: 22, height: 120, rx: 4, fill: C('sand-dk') }, P);
   for (let y = 790; y < 900; y += 16) el('rect', { x: 1296, y, width: 30, height: 4, rx: 2, fill: C('rock') }, P);
   const b = el('g', { class: 'bob' }, P);
@@ -549,6 +537,21 @@ worlds.forEach((w, wi) => { if (w.kind === 'rock') return; const r = rng(w.seed 
   el('rect', { x: 1383, y: 818, width: 4, height: 62, fill: C('ink') }, b);
   el('path', { d: 'M1389,822 L1389,874 L1424,874Z', fill: C('paper') }, b);
   el('path', { d: 'M1381,830 L1381,874 L1352,874Z', fill: C('gold') }, b); }
+
+/* Cluster Cay containers */
+{ const K = el('g', { transform: 'translate(1725,690)' }, gDeco);
+  el('ellipse', { cx: 48, cy: 24, rx: 56, ry: 7, fill: C('grass-dk'), opacity: .8 }, K);
+  [[0, 0, 'lava'], [50, 0, 'sea-lite'], [24, -24, 'gold']].forEach(([x, y, c]) => {
+    el('rect', { x, y, width: 46, height: 22, rx: 3, fill: C(c) }, K);
+    for (let i = 1; i < 5; i++) el('rect', { x: x + i * 9 - 1, y: y + 3, width: 2.5, height: 16, fill: C('ink'), opacity: .28 }, K);
+  }); }
+
+/* Browser Bay mast */
+{ const M = el('g', { transform: 'translate(1845,272)' }, gDeco);
+  el('ellipse', { cx: 0, cy: 2, rx: 22, ry: 6, fill: C('grass-dk'), opacity: .8 }, M);
+  el('path', { d: 'M-12,0 L0,-58 L12,0 M-8,-19 L8,-19 M-4,-38 L4,-38', stroke: C('ink'), 'stroke-width': 4, fill: 'none', 'stroke-linejoin': 'round', 'stroke-linecap': 'round' }, M);
+  el('circle', { class: 'lava-glow', cx: 0, cy: -62, r: 6, fill: C('lava') }, M);
+  el('path', { d: 'M14,-74 q9,12 0,24 M-14,-74 q-9,12 0,24 M25,-82 q16,20 0,40 M-25,-82 q-16,20 0,40', stroke: C('paper'), 'stroke-width': 3.5, fill: 'none', 'stroke-linecap': 'round' }, M); }
 
 /* path between levels */
 const gPath = el('g', {}, svg);
@@ -575,7 +578,7 @@ const nodes = levels.map((l, i) => {
   el('circle', { r: 24, fill: l.st === 'wip' ? C('lava') : C('paper') }, disc);
   if (l.st === 'wip') { el('rect', { x: -6, y: -13, width: 3.5, height: 26, rx: 1.5, fill: C('ink') }, disc); el('path', { d: 'M-2.5,-13 L12,-7.5 L-2.5,-2Z', fill: C('paper') }, disc); }
   else el('path', { d: star, fill: C('ink') }, disc);
-  const tx = el('text', { y: 48, 'text-anchor': 'middle', 'font-family': 'Figtree, sans-serif', 'font-weight': 800, 'font-size': 17, fill: C('paper'), stroke: C('ink'), 'stroke-width': 6, 'paint-order': 'stroke', 'stroke-linejoin': 'round' }, g);
+  const tx = el('text', { y: l.la ? -34 : 48, 'text-anchor': 'middle', 'font-family': 'Figtree, sans-serif', 'font-weight': 800, 'font-size': 17, fill: C('paper'), stroke: C('ink'), 'stroke-width': 6, 'paint-order': 'stroke', 'stroke-linejoin': 'round' }, g);
   tx.textContent = l.t;
   g.addEventListener('click', () => { begin(); travelTo(i); });
   g.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); begin(); travelTo(i); } });
@@ -584,7 +587,7 @@ const nodes = levels.map((l, i) => {
 
 /* clouds drift above everything */
 const gCloud = el('g', { 'pointer-events': 'none' }, svg);
-const clouds = [[200, 160, 1], [900, 80, 1.3], [1500, 520, .9], [520, 920, 1.1], [1150, 980, .8]].map(([x, y, s], i) => {
+const clouds = [[200, 160, 1], [900, 80, 1.3], [1500, 520, .9], [520, 980, 1.1], [1150, 990, .8], [1640, 60, .9], [2080, 520, 1]].map(([x, y, s], i) => {
   const g = el('g', {}, gCloud);
   const k = el('g', { transform: `scale(${s})` }, g);
   el('ellipse', { cx: 0, cy: 70, rx: 90, ry: 14, fill: C('sea-deep'), opacity: .22 }, k);
@@ -668,7 +671,7 @@ function frame(now) {
   const r = svg.getBoundingClientRect(), asp = r.height / Math.max(1, r.width);
   let tw, tx, ty;
   if (mapMode || !started) { tw = Math.max(W, H / asp) * 1.04; tx = W / 2 + (started || reduce ? 0 : Math.sin(now / 4000) * 40); ty = H / 2; }
-  else { const z = r.width < 720 ? 3.1 : 1.75; tw = W / z; tx = pos.x - (r.width < 720 ? 0 : tw * .14); ty = pos.y + (r.width < 720 ? tw * asp * .12 : 0); }
+  else { tw = r.width < 720 ? 516 : 914; tx = pos.x - (r.width < 720 ? 0 : tw * .14); ty = pos.y + (r.width < 720 ? tw * asp * .12 : 0); }
   const th = tw * asp, k = reduce ? 1 : Math.min(1, dt * 4);
   cam.w += (tw - cam.w) * k; cam.h = cam.w * asp; cam.x += (tx - cam.x) * k; cam.y += (ty - cam.y) * k;
   svg.setAttribute('viewBox', `${(cam.x - cam.w / 2).toFixed(1)} ${(cam.y - cam.h / 2).toFixed(1)} ${cam.w.toFixed(1)} ${cam.h.toFixed(1)}`);
@@ -689,6 +692,9 @@ const copyLabel = $('xmb-copy').querySelector('span');
 const copyStatus = $('xmb-copy-status');
 const openLink = $('xmb-open');
 const motionToggle = $('xmb-motion');
+const soundToggle = $('xmb-sound');
+const pagesBox = $('xmb-pages');
+const slug = text => text.toLowerCase().replace(/[^a-z0-9_]+/g, '-');
 const motionOK = matchMedia('(prefers-reduced-motion: no-preference)');
 
 const FOAM = [230, 239, 255];
@@ -700,26 +706,28 @@ const worldSkin = [
   { sub: 'Rust', tint: [210, 185, 236], icon: solid('<path d="M3 41 17.500 18h4l2.500 3.500 2.500-3.500h4L45 41z" stroke="currentColor" stroke-width="1.6"/><circle cx="26" cy="10.500" r="3.600"/><circle cx="20.500" cy="6" r="2.400"/>') },
   { sub: 'Desktop widgets', tint: [244, 214, 140], icon: solid('<path d="M19.500 40.500l2-20h5l2 20zm.5-28h8v5.500h-8zm-2 0 6-6.500 6 6.500z" stroke="currentColor" stroke-width="1.4"/><path d="M16.500 14 6 10.500M31.500 14 42 10.500M16.500 17 7 19m24.500-2 9.500 2M9 42.500h30" fill="none" stroke="currentColor" stroke-width="2.2"/>') },
   { sub: 'AI agent tooling', tint: [255, 122, 184], icon: solid('<path d="M4 33h40l-6.500 9h-25zM22.500 4v25H8zM26 11l13 18H26z" stroke="currentColor" stroke-width="1.4"/>') },
+  { sub: 'Data and infrastructure', tint: [120, 224, 232], icon: solid('<path d="M5 26h17v13H5zm21 0h17v13H26zM15.500 9h17v13h-17z" stroke="currentColor" stroke-width="1.4"/><path d="M9.500 29v7m4-7v7m4-7v7m13-7v7m4-7v7m4-7v7M20 12v7m4-7v7m4-7v7" fill="none" stroke="#0a1550" stroke-opacity=".5" stroke-width="1.6"/><path d="M3 43h42" fill="none" stroke="currentColor" stroke-width="2.4"/>') },
+  { sub: 'Web apps', tint: [255, 176, 58], icon: solid('<path fill-rule="evenodd" d="M7 8h34a3 3 0 0 1 3 3v26a3 3 0 0 1-3 3H7a3 3 0 0 1-3-3V11a3 3 0 0 1 3-3zm1 9v18.500h32V17zm2.500-5.600a1.700 1.700 0 1 0 .01 0zm6 0a1.700 1.700 0 1 0 .01 0zm6 0a1.700 1.700 0 1 0 .01 0z"/><path d="M13 24h13m-13 6h20" fill="none" stroke="currentColor" stroke-width="2.4"/>') },
 ];
 const levelIndex = (world, level) => levels.filter((l, i) => l.w === world && i < level).length;
 const cats = [
   { name: 'Player', sub: 'About me', tint: FOAM,
     icon: solid('<path fill-rule="evenodd" d="M20 16a14 14 0 1 0 .01 0zm-5 5.600a3.400 3.400 0 1 0 .01 0z"/><path d="M27 15l4.500-6.500 6 4.200-4.500 6.500z"/><path d="M34.500 10.500c1.500-3.500 4.500-4.600 7-3.200" fill="none" stroke="currentColor" stroke-width="2.4"/><path d="M43 1.500l1.100 3.400 3.400 1.100-3.400 1.100-1.100 3.400-1.100-3.400-3.400-1.100 3.400-1.100z"/>'),
     items: [
-      { t: 'Lorenzo Micheli', sub: 'Player file', d: 'Trained at 42 on C, writing Rust for fun, keeping containers alive at Instal.', href: '#profile', go: 'Read the player file', glyph: glyph('M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8zm-7.500 8c.9-3.800 3.700-6 7.500-6s6.600 2.200 7.500 6') },
-      { t: 'Inventory', sub: 'Languages and tools', d: 'Rust, C and C++, TypeScript, Python, Docker, Kubernetes and CI/CD, each with the projects it gets used in.', href: '#inventory', go: 'Open the inventory', glyph: glyph('M4 10a4 4 0 0 1 4-4h8a4 4 0 0 1 4 4v9H4zm0 3h16m-9-2h2v4h-2z') },
-      { t: 'Save points', sub: '2023 to 2026', d: 'The run so far, by year of last activity on GitHub.', href: '#saves', go: 'Open the save points', glyph: glyph('M6 21V4m0 1 12 4-12 4') },
-      { t: 'Overworld map', sub: 'Four islands, sixteen levels', d: 'The same projects as a map you can walk, joined by a dotted path from so_long to the newest agent skill.', href: '#top', go: 'Open the map', run: openMap, glyph: glyph('M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2zm6-2v14m6-12v14') },
+      { t: 'Lorenzo Micheli', sub: 'Player file', d: 'Trained at 42 on C, writing Rust for fun, keeping containers alive at Instal.', href: '#profile', id: 'profile', go: 'Read the player file', run: () => openPage('profile'), glyph: glyph('M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8zm-7.500 8c.9-3.800 3.700-6 7.500-6s6.600 2.200 7.500 6') },
+      { t: 'Inventory', sub: 'Languages and tools', d: 'Rust, C and C++, TypeScript, Python, Docker, Kubernetes and CI/CD, each with the projects it gets used in.', href: '#inventory', id: 'inventory', go: 'Open the inventory', run: () => openPage('inventory'), glyph: glyph('M4 10a4 4 0 0 1 4-4h8a4 4 0 0 1 4 4v9H4zm0 3h16m-9-2h2v4h-2z') },
+      { t: 'Save points', sub: '2023 to 2026', d: 'The run so far, by year of last activity on GitHub.', href: '#saves', id: 'saves', go: 'Open the save points', run: () => openPage('saves'), glyph: glyph('M6 21V4m0 1 12 4-12 4') },
+      { t: 'Overworld map', sub: 'Six islands, twenty-nine levels', d: 'The same projects as a map you can walk, joined by one dotted path from so_long to 42-matcha.', href: '#map', id: 'map', go: 'Open the map', run: openMap, glyph: glyph('M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2zm6-2v14m6-12v14') },
     ] },
   ...worlds.map((w, i) => ({ name: w.name, ...worldSkin[i], items: levels.flatMap((l, j) => l.w === i ? [{
-    t: l.t, d: l.d, code: l.code, href: l.url, ext: true, go: 'View on GitHub', level: j, lang: l.lang, st: l.st,
+    t: l.t, id: slug(l.t), d: l.d, code: l.code, href: l.url, ext: true, go: 'View on GitHub', level: j, lang: l.lang, st: l.st,
     art: `previews/${l.url.slice(GH.length).toLowerCase()}.webp`,
   }] : []) })),
   { name: 'Network', sub: 'Find me online', tint: FOAM,
     icon: solid('<g fill="none" stroke="currentColor" stroke-width="2.4"><circle cx="24" cy="24" r="18"/><ellipse cx="24" cy="24" rx="8" ry="18"/><path d="M6 24h36M9.500 14h29m-29 20h29"/></g>'),
     items: [
-      { t: 'GitHub', sub: 'Bombatomica64', d: 'Every project here, with its source and its history.', href: 'https://github.com/Bombatomica64', ext: true, go: 'Open GitHub', glyph: glyph('M9 6 3 12l6 6m6-12 6 6-6 6') },
-      { t: 'Instagram', sub: 'lorenzo.micheli01', d: 'Anything that is not code is a DM away.', href: 'https://instagram.com/lorenzo.micheli01', ext: true, go: 'Open Instagram', glyph: glyph('M4 8h3l2-3h6l2 3h3v11H4zm8 8.500a3.500 3.500 0 1 0 0-7 3.500 3.500 0 0 0 0 7z') },
+      { t: 'GitHub', id: 'github', sub: 'Bombatomica64', d: 'Every project here, with its source and its history.', href: 'https://github.com/Bombatomica64', ext: true, go: 'Open GitHub', glyph: glyph('M9 6 3 12l6 6m6-12 6 6-6 6') },
+      { t: 'Instagram', id: 'instagram', sub: 'lorenzo.micheli01', d: 'Anything that is not code is a DM away.', href: 'https://instagram.com/lorenzo.micheli01', ext: true, go: 'Open Instagram', glyph: glyph('M4 8h3l2-3h6l2 3h3v11H4zm8 8.500a3.500 3.500 0 1 0 0-7 3.500 3.500 0 0 0 0 7z') },
     ] },
 ];
 const pick = cats.map(() => 0);
@@ -729,7 +737,8 @@ let cat = -1;
    size, fade and offset is read off the spring's fractional position. A held key or a
    dragged finger glides through the row instead of restarting an animation each step. */
 const nav = { x: 1, v: 0 };
-let drag = null, navFrameId = 0, navLast = 0;
+const depth = { x: 0, v: 0 }; /* 0 is the menu, 1 is an open page */
+let drag = null, navFrameId = 0, navLast = 0, page = null;
 function spring(s, target, dt, w) {
   const d = s.x - target, k = s.v + w * d, e = Math.exp(-w * dt);
   s.x = target + (d + k * dt) * e;
@@ -739,6 +748,8 @@ const put = (element, name, value) => element.style.setProperty(name, value.toFi
 
 function layout() {
   put(track, '--pos', nav.x);
+  put(consoleView, '--depth', depth.x);
+  consoleView.classList.toggle('page-live', !!page || depth.x > .004);
   /* sections flying past on a long jump stay dark; the one you slow down on lights up */
   const calm = Math.max(0, Math.min(1, 2 - Math.abs(nav.v) / 9));
   cats.forEach((c, i) => {
@@ -770,7 +781,9 @@ function navTick(now) {
     if (dt) nav.v = nav.v * .5 + (drag.x - nav.x) / dt * .5;
     nav.x = drag.x;
   } else spring(nav, cat, dt, 19);
-  let resting = !drag && Math.abs(nav.x - cat) < .001 && Math.abs(nav.v) < .01;
+  spring(depth, page ? 1 : 0, dt, 17);
+  let resting = !drag && Math.abs(nav.x - cat) < .001 && Math.abs(nav.v) < .01
+    && Math.abs(depth.x - (page ? 1 : 0)) < .001 && Math.abs(depth.v) < .01;
   cats.forEach((c, i) => {
     spring(c.at, pick[i], dt, 22);
     if (Math.abs(c.at.x - pick[i]) > .001 || Math.abs(c.at.v) > .01) resting = false;
@@ -783,6 +796,7 @@ function navTick(now) {
 
 function rest() {
   nav.x = cat; nav.v = 0;
+  depth.x = page ? 1 : 0; depth.v = 0;
   cats.forEach((c, i) => { c.at.x = pick[i]; c.at.v = 0; });
 }
 
@@ -950,10 +964,101 @@ function select(c, j, focus = false, settle = false) {
     showDetail(cats[c].items[j], dx, dy, first);
     tintTo = cats[c].tint;
     if (!waveFrameId) { tint = [...tintTo]; drawWave(); }
+    if (!first) { blip(dx ? 'side' : 'move'); setHash(cats[c].items[j].id); }
   } else if (settle) showDetail(cats[c].items[j], 0, 0);
   if (first) arrive(); else move();
   if (focus) cats[c].els[j].focus({ preventScroll: true });
 }
+
+/* pages: the player file, inventory and save points open over the menu */
+const pages = {};
+document.querySelectorAll('#pages .xmb-page').forEach(section => {
+  pages[section.id] = section;
+  section.hidden = true;
+  pagesBox.append(section);
+});
+$('pages').remove();
+document.querySelector('.foot').hidden = true;
+
+function openPage(id) {
+  page = id;
+  for (const key in pages) pages[key].hidden = key !== id;
+  consoleView.classList.add('has-page', 'page-live');
+  pagesBox.inert = false;
+  pagesBox.scrollTop = 0;
+  $('xmb-cross').inert = detailView.inert = true;
+  move();
+  blip('open');
+  setHash(id);
+  if (consoleView.getBoundingClientRect().top < 0) consoleView.scrollIntoView();
+  pages[id].querySelector('h2').focus({ preventScroll: true });
+}
+
+function closePage(focus = true) {
+  if (!page) return;
+  page = null;
+  consoleView.classList.remove('has-page');
+  pagesBox.inert = true;
+  $('xmb-cross').inert = detailView.inert = false;
+  move();
+  blip('back');
+  setHash(cats[cat].items[pick[cat]].id);
+  if (focus) cats[cat].els[pick[cat]].focus({ preventScroll: true });
+}
+
+$('xmb-back').addEventListener('click', () => closePage());
+/* the menu is inert while a page is open, so a click on it lands here */
+consoleView.addEventListener('click', event => {
+  if (page && event.target === consoleView) closePage();
+});
+
+/* every item has an address: /#smelt selects it, /#inventory opens that page, /#map the map */
+function setHash(id) {
+  try { history.replaceState(null, '', `#${id}`); } catch { /* file: pages in some browsers */ }
+}
+
+function applyHash() {
+  const want = decodeURIComponent(location.hash.slice(1)).toLowerCase();
+  if (!want) return;
+  cats.forEach((c, i) => c.items.forEach((item, j) => {
+    if (item.id !== want) return;
+    if (consoleView.hidden) openConsole(false);
+    select(i, j);
+    if (pages[want]) openPage(want);
+    else { closePage(false); if (want === 'map') openMap(); }
+  }));
+}
+addEventListener('hashchange', applyHash);
+
+/* sounds are synthesised, short, and off until asked for */
+let audio = null, soundOn = false;
+try { soundOn = localStorage.getItem('console-sound') === 'on'; } catch { /* storage blocked */ }
+const tones = { move: [1250, 1040, .05], side: [940, 780, .06], open: [620, 930, .13], back: [820, 540, .11] };
+function blip(kind) {
+  if (!soundOn) return;
+  try {
+    audio = audio || new AudioContext();
+    if (audio.state === 'suspended') audio.resume();
+    const [from, to, length] = tones[kind], t = audio.currentTime;
+    const tone = audio.createOscillator(), gain = audio.createGain();
+    tone.frequency.setValueAtTime(from, t);
+    tone.frequency.exponentialRampToValueAtTime(to, t + length);
+    gain.gain.setValueAtTime(0, t);
+    gain.gain.linearRampToValueAtTime(.055, t + .006);
+    gain.gain.exponentialRampToValueAtTime(.0001, t + length);
+    tone.connect(gain).connect(audio.destination);
+    tone.start(t);
+    tone.stop(t + length + .02);
+  } catch { /* no audio device */ }
+}
+function showSound() { soundToggle.textContent = soundOn ? 'Turn sound off' : 'Turn sound on'; }
+soundToggle.addEventListener('click', () => {
+  soundOn = !soundOn;
+  try { localStorage.setItem('console-sound', soundOn ? 'on' : 'off'); } catch { /* storage blocked */ }
+  showSound();
+  blip('open');
+});
+showSound();
 
 openLink.addEventListener('click', event => {
   const item = cats[cat].items[pick[cat]];
@@ -1083,6 +1188,7 @@ function openMap() {
   if (level === undefined) setMap(true); else jumpToMapProject(level);
   $('open-console').hidden = false;
   $('open-console').focus();
+  setHash('map');
   updateMotion();
   last = performance.now();
   frameId = requestAnimationFrame(frame);
@@ -1090,18 +1196,22 @@ function openMap() {
 
 function selectLevel(index, focus) { select(levels[index].w + 1, levelIndex(levels[index].w, index), focus); }
 
-$('open-console').addEventListener('click', () => {
+function openConsole(focus = true) {
   $('stage').hidden = true;
   cancelAnimationFrame(frameId);
   consoleView.hidden = false;
-  selectLevel(walk ? walk.to : here, true);
+  selectLevel(walk ? walk.to : here, focus);
+  setHash(cats[cat].items[pick[cat]].id);
   arrive();
   updateMotion();
-});
+}
+$('open-console').addEventListener('click', () => openConsole());
+$('hud-profile').addEventListener('click', () => { openConsole(false); select(0, 0); openPage('profile'); });
 
 consoleView.hidden = false;
 $('stage').hidden = true;
 select(1, 0);
+applyHash();
 updateMotion();
 
 /* On touch the row follows the finger and settles on the nearest section when released.
@@ -1151,6 +1261,10 @@ cross.addEventListener('click', event => { if (swiped) { event.preventDefault();
 addEventListener('keydown', event => {
   if (consoleView.hidden || event.altKey || event.ctrlKey || event.metaKey || event.shiftKey) return;
   const target = event.target, key = event.key;
+  if (page) {
+    if (key === 'Escape' || key === 'Backspace' || key === 'ArrowLeft') { event.preventDefault(); closePage(); }
+    return;
+  }
   const box = consoleView.getBoundingClientRect();
   if (!consoleView.contains(target) && (target !== document.body || box.top < -box.height / 2)) return;
   const onItem = target.classList.contains('xmb-item');
@@ -1172,12 +1286,12 @@ $('start').addEventListener('click', begin);
 $('prev').addEventListener('click', () => { begin(); travelTo((walk ? walk.to : here) - 1); });
 $('next').addEventListener('click', () => { begin(); travelTo((walk ? walk.to : here) + 1); });
 $('mapBtn').addEventListener('click', () => { begin(); setMap(!mapMode); });
-document.querySelectorAll('a[data-lv]').forEach(a => a.addEventListener('click', e => {
-  const i = levels.findIndex(l => l.t === a.dataset.lv); if (i < 0) return;
-  e.preventDefault();
-  if (consoleView.hidden) jumpToMapProject(i); else selectLevel(i);
-  (consoleView.hidden ? $('stage') : consoleView).scrollIntoView({ behavior: reduce ? 'auto' : 'smooth' });
-  (consoleView.hidden ? $('enter') : cats[cat].els[pick[cat]]).focus({ preventScroll: true });
+document.querySelectorAll('a.warp').forEach(a => a.addEventListener('click', event => {
+  const i = levels.findIndex(l => slug(l.t) === a.hash.slice(1));
+  if (i < 0) return;
+  event.preventDefault();
+  closePage(false);
+  selectLevel(i, true);
 }));
 let mapVisible = true;
 new IntersectionObserver(([e]) => { mapVisible = e.isIntersecting && e.intersectionRatio > .5; }, { threshold: [0, .5, 1] }).observe($('stage'));
