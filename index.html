@@ -215,48 +215,45 @@ footer{text-align:center;padding:0 16px 40px;color:var(--on-sea-muted);font-size
 .xmb-cross{position:absolute;inset:0;overflow:hidden;touch-action:pan-y;
   -webkit-mask-image:linear-gradient(#0000 44px,#000 104px,#000 calc(100% - 120px),#0000 calc(100% - 56px));
   mask-image:linear-gradient(#0000 44px,#000 104px,#000 calc(100% - 120px),#0000 calc(100% - 56px))}
-.xmb-track{position:absolute;left:var(--ax);top:var(--ay);width:0;height:0;transform:translateX(calc(var(--sel) * var(--step) * -1));transition:transform .36s var(--ease);animation:xmb-boot .8s var(--ease) both}
-@keyframes xmb-boot{from{opacity:0;transform:translateX(calc(var(--sel) * var(--step) * -1 + 72px))}}
+.xmb-track{position:absolute;left:var(--ax);top:var(--ay);width:0;height:0;transform:translateX(calc(var(--pos) * var(--step) * -1));animation:xmb-boot .7s ease-out both}
+@keyframes xmb-boot{from{opacity:0}}
 
-.xmb-cat{position:absolute;left:calc(var(--i) * var(--step));top:0;width:var(--step);height:80px;margin:-40px 0 0 calc(var(--step) / -2);padding:0;border:0;background:none;color:inherit;font:inherit;text-shadow:inherit;cursor:pointer;display:grid;place-items:center}
-.xmb-cat svg{width:72px;height:72px;opacity:.62;transform:scale(.68);transition:transform .36s var(--ease),opacity .25s;filter:drop-shadow(0 2px 4px #06103c80)}
-.xmb-cat:hover svg{opacity:.9}
-.xmb-cat[aria-selected=true] svg{opacity:1;transform:none;filter:drop-shadow(0 0 9px #ffffff73)}
-.xmb-cat-label{position:absolute;top:100%;left:50%;transform:translateX(-50%);white-space:nowrap;text-align:center;font-size:1rem;line-height:1.3;opacity:0;transition:opacity .25s;pointer-events:none}
-.xmb-cat-label small{display:block;font-size:.82rem;font-weight:300;opacity:.8}
-.xmb-cat:hover .xmb-cat-label,.xmb-cat:focus-visible .xmb-cat-label,.xmb-cat[aria-selected=true] .xmb-cat-label{opacity:1}
-.xmb-cat:not([aria-selected=true]) small{display:none}
+/* --f, --show, --g and the --w weights are written by the script every frame of a move; --hov is hover */
+@property --hov{syntax:"<number>";inherits:true;initial-value:0}
+.xmb-cat{--f:0;position:absolute;left:calc(var(--i) * var(--step));top:0;width:var(--step);height:80px;margin:-40px 0 0 calc(var(--step) / -2);padding:0;border:0;background:none;color:inherit;font:inherit;text-shadow:inherit;cursor:pointer;display:grid;place-items:center;transition:--hov .2s}
+.xmb-cat:hover,.xmb-cat:focus-visible{--hov:1}
+.xmb-cat svg{width:72px;height:72px;opacity:calc(.62 + .38 * max(var(--f), var(--hov, 0) * .75));transform:scale(calc(.68 + .32 * var(--f)));filter:drop-shadow(0 0 9px rgb(255 255 255 / calc(.45 * var(--f)))) drop-shadow(0 2px 4px #06103c80)}
+.xmb-cat-label{position:absolute;top:100%;left:50%;transform:translateX(-50%);white-space:nowrap;text-align:center;font-size:1rem;line-height:1.3;opacity:max(var(--f) * 2 - 1, var(--hov, 0));pointer-events:none}
+.xmb-cat-label small{display:block;font-size:.82rem;font-weight:300;opacity:calc(var(--f) * 1.6 - .8)}
 
-.xmb-col{position:absolute;left:calc(var(--i) * var(--step));top:0;opacity:0;visibility:hidden;transition:opacity .18s,visibility 0s .18s}
-.xmb-col.is-active{opacity:1;visibility:visible;transition:opacity .32s .06s}
-.xmb-item{position:absolute;left:calc(var(--box) / -2);top:0;display:flex;align-items:center;gap:16px;height:var(--row);margin-top:calc(var(--row) / -2);padding-right:16px;color:inherit;text-decoration:none;white-space:nowrap;cursor:pointer;opacity:.86;transform:translateY(var(--y));transition:transform .32s var(--ease),opacity .25s}
-.xmb-item:hover{opacity:1}
-.xmb-item.is-above{--y:calc(var(--above-y) + var(--n) * var(--row))}
-.xmb-item.is-below{--y:calc(var(--below-y) + var(--n) * var(--row))}
-.xmb-item.is-current{--y:var(--cur-y);opacity:1}
+.xmb-col{position:absolute;left:calc(var(--i) * var(--step));top:0;opacity:var(--show, 0);visibility:hidden}
+.xmb-col.is-live{visibility:visible}
+.xmb-item{--g:0;--wa:0;--wc:0;--wb:1;--wn:0;--dip:1;position:absolute;left:calc(var(--box) / -2);top:0;display:flex;align-items:center;gap:16px;height:var(--row);margin-top:calc(var(--row) / -2);padding-right:16px;color:inherit;text-decoration:none;white-space:nowrap;cursor:pointer;
+  opacity:calc(max(.86 + .14 * var(--g), var(--hov, 0)) * var(--dip));
+  transform:translateY(calc(var(--wa) * var(--above-y) + var(--wc) * var(--cur-y) + var(--wb) * var(--below-y) + var(--wn) * var(--row)));transition:--hov .2s}
+.xmb-item:hover{--hov:1}
 .xmb-item:focus{outline:none}
 .xmb-thumb{flex:none;display:grid;place-items:center;width:var(--box)}
-.xmb-tile{position:relative;display:block;width:var(--box);aspect-ratio:16/9;transform:scale(.5);transition:transform .32s var(--ease)}
+.xmb-tile{position:relative;display:block;width:var(--box);aspect-ratio:16/9;transform:scale(calc(.5 + .5 * var(--g)))}
 .xmb-tile > *{display:block;width:100%;height:100%}
 .xmb-tile img{object-fit:cover;background:var(--ink);box-shadow:0 0 0 1.5px #ffffff59,0 6px 16px #06103c8c}
 .xmb-tile svg{filter:drop-shadow(0 2px 4px #06103c80)}
-.xmb-tile::before{content:"";position:absolute;z-index:-1;inset:-16px -18px;border-radius:50%;background:radial-gradient(closest-side,#ffffff8c,#fff0);opacity:0}
-.is-current .xmb-tile{transform:none}
-.is-active .is-current .xmb-tile::before{opacity:.5;animation:xmb-pulse 2.8s ease-in-out infinite}
+.xmb-tile::before{content:"";position:absolute;z-index:-1;inset:-16px -18px;border-radius:50%;background:radial-gradient(closest-side,#ffffff8c,#fff0);opacity:calc(var(--g) * .5)}
+.is-active .is-current .xmb-tile::before{animation:xmb-pulse 2.8s ease-in-out infinite}
 @keyframes xmb-pulse{50%{opacity:.95}}
 .xmb.is-paused .xmb-tile::before{animation-play-state:paused}
 .xmb-item:focus-visible .xmb-tile{outline:2px solid #fff;outline-offset:5px}
 .xmb-text{position:relative;display:block}
-.xmb-name{display:block;font-size:clamp(1.4rem,1.1rem + .75vw,1.8rem);font-weight:400;line-height:1.2;transform-origin:0 50%;transform:scale(.62);transition:transform .32s var(--ease)}
-.is-current .xmb-name{font-weight:300;transform:translateY(-.4em)}
-.xmb-sub{position:absolute;left:0;top:calc(100% - .42em);display:flex;align-items:center;gap:.9em;font-size:.94rem;font-weight:400;opacity:0;transition:opacity .2s}
-.is-current .xmb-sub{opacity:.92;transition:opacity .3s .1s}
+.xmb-name{display:block;font-size:clamp(1.4rem,1.1rem + .75vw,1.8rem);font-weight:400;line-height:1.2;transform-origin:0 50%;transform:translateY(calc(var(--g) * -.4em)) scale(calc(.62 + .38 * var(--g)))}
+.is-near .xmb-name{font-weight:300}
+.xmb-sub{position:absolute;left:0;top:calc(100% - .42em);display:flex;align-items:center;gap:.9em;font-size:.94rem;font-weight:400;opacity:calc(var(--g) * 2.4 - 1.48)}
 .xmb-sub span{display:inline-flex;align-items:center;gap:.35em}
 .xmb-sub svg{width:1.05em;height:1.05em}
 
 .xmb-detail{position:absolute;z-index:1;left:calc(var(--ax) + clamp(330px,31vw,470px));right:var(--gutter);top:calc(var(--ay) + 76px);max-width:720px}
 .xmb-art{position:relative;aspect-ratio:2.2;width:min(100%,(var(--h) - var(--ay) - 340px) * 2.2);min-width:260px;background:var(--ink);box-shadow:0 0 0 1px #ffffff40,0 20px 56px #050d3aa6}
 .xmb-art img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .4s}
+.xmb-art.is-cut img{transition:none}
 .xmb-art img.is-on{opacity:1}
 .xmb-detail.no-art .xmb-art{display:none}
 .xmb-desc{max-width:44ch;margin:20px 0 0;font-size:1.12rem;line-height:1.6;text-shadow:0 1px 2px #06103c,0 0 14px #0a1550cc}
@@ -306,12 +303,13 @@ footer{text-align:center;padding:0 16px 40px;color:var(--on-sea-muted);font-size
     <p class="xmb-clock"><time id="xmb-clock"></time></p>
   </header>
   <div class="xmb-cross" id="xmb-cross">
-    <div class="xmb-track" id="xmb-track" style="--sel:1">
+    <div class="xmb-track" id="xmb-track" style="--pos:1">
       <div id="xmb-cats" role="tablist" aria-label="Sections"></div>
       <div id="xmb-cols"></div>
     </div>
   </div>
   <article class="xmb-detail" id="xmb-detail" aria-labelledby="xmb-title">
+    <div id="xmb-body">
     <div class="xmb-art" id="xmb-art"><img alt="" width="1100" height="500"><img alt="" width="1100" height="500"></div>
     <div id="xmb-info">
       <div aria-live="polite" aria-atomic="true">
@@ -324,6 +322,7 @@ footer{text-align:center;padding:0 16px 40px;color:var(--on-sea-muted);font-size
         <span class="xmb-copy-status" id="xmb-copy-status" role="status"></span>
       </div>
       <a class="xmb-btn xmb-open" id="xmb-open"></a>
+    </div>
     </div>
   </article>
   <footer class="xmb-legend">
@@ -726,15 +725,86 @@ const cats = [
 const pick = cats.map(() => 0);
 let cat = -1;
 
-function place(c) {
+/* Motion. The section row and each item list ride a critically damped spring, and every
+   size, fade and offset is read off the spring's fractional position. A held key or a
+   dragged finger glides through the row instead of restarting an animation each step. */
+const nav = { x: 1, v: 0 };
+let drag = null, navFrameId = 0, navLast = 0;
+function spring(s, target, dt, w) {
+  const d = s.x - target, k = s.v + w * d, e = Math.exp(-w * dt);
+  s.x = target + (d + k * dt) * e;
+  s.v = (s.v - w * k * dt) * e;
+}
+const put = (element, name, value) => element.style.setProperty(name, value.toFixed(3));
+
+function layout() {
+  put(track, '--pos', nav.x);
+  /* sections flying past on a long jump stay dark; the one you slow down on lights up */
+  const calm = Math.max(0, Math.min(1, 2 - Math.abs(nav.v) / 9));
+  cats.forEach((c, i) => {
+    const f = Math.max(0, 1 - Math.abs(i - nav.x));
+    put(c.tab, '--f', f);
+    put(c.col, '--show', Math.max(0, f * 2 - 1) * calm);
+    c.col.classList.toggle('is-live', f > .5 || i === cat);
+    c.els.forEach((item, j) => {
+      const o = j - c.at.x;
+      if (c.seen[j] === o) return;
+      c.seen[j] = o;
+      const g = Math.max(0, 1 - Math.abs(o));
+      put(item, '--g', g);
+      put(item, '--wa', o <= -1 ? 1 : o < 0 ? -o : 0);
+      put(item, '--wc', g);
+      put(item, '--wb', o >= 1 ? 1 : o > 0 ? o : 0);
+      put(item, '--wn', o <= -1 ? o + 1 : o >= 1 ? o - 1 : 0);
+      /* an item crossing the section row ducks out of sight instead of sliding over the icon */
+      put(item, '--dip', o > -1 && o < 0 ? 1 - .9 * Math.sin(Math.PI * -o) : 1);
+      item.classList.toggle('is-near', g > .5);
+    });
+  });
+}
+
+function navTick(now) {
+  const dt = Math.max(0, Math.min(.034, (now - navLast) / 1000));
+  navLast = now;
+  if (drag) {
+    if (dt) nav.v = nav.v * .5 + (drag.x - nav.x) / dt * .5;
+    nav.x = drag.x;
+  } else spring(nav, cat, dt, 19);
+  let resting = !drag && Math.abs(nav.x - cat) < .001 && Math.abs(nav.v) < .01;
+  cats.forEach((c, i) => {
+    spring(c.at, pick[i], dt, 22);
+    if (Math.abs(c.at.x - pick[i]) > .001 || Math.abs(c.at.v) > .01) resting = false;
+  });
+  if (resting) rest();
+  layout();
+  if (!waveFrameId) drawWave();
+  navFrameId = resting ? 0 : requestAnimationFrame(navTick);
+}
+
+function rest() {
+  nav.x = cat; nav.v = 0;
+  cats.forEach((c, i) => { c.at.x = pick[i]; c.at.v = 0; });
+}
+
+function move() {
+  if (!motionOK.matches) { rest(); layout(); return; }
+  if (!navFrameId) { navLast = performance.now(); navFrameId = requestAnimationFrame(navTick); }
+}
+
+/* the row drifts in from the right when the console appears */
+function arrive() {
+  rest();
+  if (motionOK.matches) nav.x = cat + .5;
+  layout();
+  move();
+}
+
+function mark(c) {
   cats[c].els.forEach((item, j) => {
-    const n = j - pick[c];
-    item.classList.toggle('is-above', n < 0);
-    item.classList.toggle('is-current', n === 0);
-    item.classList.toggle('is-below', n > 0);
-    item.style.setProperty('--n', n < 0 ? n + 1 : n > 0 ? n - 1 : 0);
-    item.tabIndex = n ? -1 : 0;
-    if (n) item.removeAttribute('aria-current'); else item.setAttribute('aria-current', 'true');
+    const current = j === pick[c];
+    item.classList.toggle('is-current', current);
+    item.tabIndex = current ? 0 : -1;
+    if (current) item.setAttribute('aria-current', 'true'); else item.removeAttribute('aria-current');
   });
 }
 
@@ -774,33 +844,93 @@ cats.forEach((c, i) => {
     return a;
   });
   $('xmb-cols').append(c.col);
-  place(i);
+  c.at = { x: 0, v: 0 };
+  c.seen = [];
+  mark(i);
 });
 
-/* preview: two stacked images that crossfade once the selection settles */
-const artImages = [...$('xmb-art').querySelectorAll('img')];
-let artOn = 0, artJob = 0, artTimer;
-function showArt(item, wait) {
-  clearTimeout(artTimer);
+/* The detail panel waits for the selection to settle. A change of section carries the whole
+   panel out toward where the row is going and brings the new one in behind it; a change of
+   item only swaps the text and crossfades the preview. */
+const detailBody = $('xmb-body');
+const detailInfo = $('xmb-info');
+const artBox = $('xmb-art');
+const artImages = [...artBox.querySelectorAll('img')];
+let artOn = 0, artJob = 0, detailTimer = 0, bodyOut = false, infoOut = false, enterX = 0, enterY = 0;
+
+function showArt(item, fade) {
   const job = ++artJob;
   detailView.classList.toggle('no-art', !item.art);
   if (!item.art) return;
-  const now = artImages[artOn];
+  const now = artImages[artOn], next = artImages[1 - artOn];
   if (now.dataset.src === item.art) { now.classList.add('is-on'); return; }
-  artTimer = setTimeout(() => {
-    const next = artImages[1 - artOn];
-    next.dataset.src = next.src = item.art;
-    const swap = () => {
-      if (job !== artJob) return;
-      now.classList.remove('is-on'); now.alt = '';
-      next.classList.add('is-on'); next.alt = `${item.t} preview`;
-      artOn = 1 - artOn;
-    };
-    next.decode().then(swap, swap);
-  }, wait);
+  next.dataset.src = next.src = item.art;
+  const swap = () => {
+    if (job !== artJob) return;
+    artBox.classList.toggle('is-cut', !fade);
+    now.classList.remove('is-on'); now.alt = '';
+    next.classList.add('is-on'); next.alt = `${item.t} preview`;
+    artOn = 1 - artOn;
+  };
+  if (fade) next.decode().then(swap, swap); else swap();
 }
 
-function select(c, j, focus = false) {
+function fill(item, fade) {
+  $('xmb-title').textContent = item.t;
+  $('xmb-desc').textContent = item.d;
+  commandRow.hidden = !item.code;
+  commandCode.textContent = item.code || '';
+  copyLabel.textContent = 'Copy';
+  copyStatus.textContent = '';
+  openLink.textContent = item.go;
+  openLink.href = item.href;
+  if (item.ext) { openLink.target = '_blank'; openLink.rel = 'noopener'; }
+  else { openLink.removeAttribute('target'); openLink.removeAttribute('rel'); }
+  showArt(item, fade);
+}
+
+function leave(element, x, y) {
+  element.style.transition = 'opacity .13s ease-in, transform .18s ease-in';
+  element.style.opacity = 0;
+  element.style.transform = `translate(${x}px, ${y}px)`;
+}
+
+function enter(element, x, y) {
+  element.style.transition = 'none';
+  element.style.transform = `translate(${x}px, ${y}px)`;
+  element.getBoundingClientRect();
+  element.style.transition = 'opacity .32s ease-out, transform .5s var(--ease)';
+  element.style.opacity = 1;
+  element.style.transform = 'none';
+}
+
+function hideDetail(dx) {
+  clearTimeout(detailTimer);
+  bodyOut = true;
+  enterX = dx;
+  leave(detailBody, dx * -28, 0);
+}
+
+function showDetail(item, dx, dy, instant) {
+  clearTimeout(detailTimer);
+  if (instant || !motionOK.matches) {
+    bodyOut = infoOut = false;
+    detailBody.removeAttribute('style');
+    detailInfo.removeAttribute('style');
+    fill(item, false);
+    return;
+  }
+  if (dx) hideDetail(dx);
+  else if (dy && !bodyOut) { infoOut = true; enterY = dy; leave(detailInfo, 0, dy * -8); }
+  detailTimer = setTimeout(() => {
+    fill(item, !bodyOut);
+    if (bodyOut) enter(detailBody, enterX * 40, 0);
+    if (infoOut) enter(detailInfo, 0, enterY * 12);
+    bodyOut = infoOut = false;
+  }, bodyOut ? 170 : 110);
+}
+
+function select(c, j, focus = false, settle = false) {
   c = Math.max(0, Math.min(cats.length - 1, c));
   if (j === undefined) j = pick[c];
   j = Math.max(0, Math.min(cats[c].items.length - 1, j));
@@ -809,34 +939,19 @@ function select(c, j, focus = false) {
   const dy = dx ? 0 : Math.sign(j - pick[c]);
   if (first || dx || dy) {
     cat = c; pick[c] = j;
-    place(c);
-    track.style.setProperty('--sel', c);
+    mark(c);
     cats.forEach((k, i) => {
       k.tab.setAttribute('aria-selected', i === c);
       k.tab.tabIndex = i === c ? 0 : -1;
       k.col.classList.toggle('is-active', i === c);
+      if (i === c) k.col.classList.add('is-live'); /* focusable now, before the spring brings it into view */
       k.col.inert = i !== c;
     });
-    const item = cats[c].items[j];
-    $('xmb-title').textContent = item.t;
-    $('xmb-desc').textContent = item.d;
-    commandRow.hidden = !item.code;
-    commandCode.textContent = item.code || '';
-    copyLabel.textContent = 'Copy';
-    copyStatus.textContent = '';
-    openLink.textContent = item.go;
-    openLink.href = item.href;
-    if (item.ext) { openLink.target = '_blank'; openLink.rel = 'noopener'; }
-    else { openLink.removeAttribute('target'); openLink.removeAttribute('rel'); }
-    showArt(item, first ? 0 : 130);
-    const info = $('xmb-info');
-    info.getAnimations().forEach(animation => animation.cancel());
-    if (!first && motionOK.matches) info.animate(
-      [{ transform: `translate(${dx * 22}px, ${dy * 12}px)`, opacity: 0 }, { transform: 'none', opacity: 1 }],
-      { duration: 340, easing: 'cubic-bezier(.16,1,.3,1)' });
+    showDetail(cats[c].items[j], dx, dy, first);
     tintTo = cats[c].tint;
     if (!waveFrameId) { tint = [...tintTo]; drawWave(); }
-  }
+  } else if (settle) showDetail(cats[c].items[j], 0, 0);
+  if (first) arrive(); else move();
   if (focus) cats[c].els[j].focus({ preventScroll: true });
 }
 
@@ -884,7 +999,7 @@ function drawWave() {
     const curve = q => {
       const points = [];
       for (let x = -seg; x <= waveW + seg; x += seg) {
-        const u = x / span + phase;
+        const u = x / span + phase + nav.x * .035; /* the ribbon drifts a little with the row */
         points.push(x, mid
           + a * .6 * Math.sin(u * 3.7 + t * .2)
           + a * .52 * Math.sin(u * 1.5 - t * .12 + 2.1)
@@ -980,6 +1095,7 @@ $('open-console').addEventListener('click', () => {
   cancelAnimationFrame(frameId);
   consoleView.hidden = false;
   selectLevel(walk ? walk.to : here, true);
+  arrive();
   updateMotion();
 });
 
@@ -988,20 +1104,48 @@ $('stage').hidden = true;
 select(1, 0);
 updateMotion();
 
-/* swipe sideways to change section; vertical drags stay with the page */
+/* On touch the row follows the finger and settles on the nearest section when released.
+   Vertical drags stay with the page. */
 const cross = $('xmb-cross');
-let swipe = null, swiped = false;
-cross.addEventListener('pointerdown', event => { if (event.pointerType !== 'mouse') swipe = { x: event.clientX, y: event.clientY }; });
-cross.addEventListener('pointercancel', () => { swipe = null; });
-cross.addEventListener('pointerup', event => {
-  if (!swipe) return;
-  const dx = event.clientX - swipe.x, dy = event.clientY - swipe.y;
-  swipe = null;
-  if (Math.abs(dx) < 44 || Math.abs(dx) < Math.abs(dy) * 1.5) return;
+let touch = null, swiped = false;
+cross.addEventListener('pointerdown', event => {
+  if (event.pointerType !== 'mouse' && !touch) touch = { id: event.pointerId, x: event.clientX, y: event.clientY, from: nav.x, at: nav.x, on: false };
+});
+cross.addEventListener('pointermove', event => {
+  if (!touch || event.pointerId !== touch.id) return;
+  const dx = event.clientX - touch.x, dy = event.clientY - touch.y;
+  if (!touch.on) {
+    if (Math.abs(dx) < 10 || Math.abs(dx) < Math.abs(dy) * 1.2) return;
+    touch.on = true;
+    cross.setPointerCapture(event.pointerId);
+    hideDetail(-Math.sign(dx));
+  }
+  const last = cats.length - 1, step = cats[1].tab.offsetLeft - cats[0].tab.offsetLeft;
+  let x = touch.from - dx / step;
+  if (x < 0) x *= .3; else if (x > last) x = last + (x - last) * .3;
+  touch.at = x;
+  touch.dx = dx;
+  drag = { x };
+  move();
+});
+function release(event) {
+  if (!touch || event.pointerId !== touch.id) return;
+  const { on, at, dx } = touch;
+  touch = null;
+  if (!on) return;
+  drag = null;
   swiped = true;
   setTimeout(() => { swiped = false; }, 350);
-  select(cat - Math.sign(dx));
-});
+  nav.v = Math.max(-25, Math.min(25, nav.v));
+  let target = cat;
+  if (event.type === 'pointerup') {
+    target = Math.round(at + Math.max(-.6, Math.min(.6, nav.v * .12)));
+    if (target === cat && Math.abs(dx) > 44) target = cat - Math.sign(dx);
+  }
+  select(target, undefined, false, true);
+}
+cross.addEventListener('pointerup', release);
+cross.addEventListener('pointercancel', release);
 cross.addEventListener('click', event => { if (swiped) { event.preventDefault(); event.stopPropagation(); } }, true);
 
 addEventListener('keydown', event => {
