@@ -24,7 +24,7 @@
 <meta name="description" content="Lorenzo Micheli (Bombatomica64): Rust, C and DevOps projects laid out as a world map you can walk.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Dela+Gothic+One&family=Figtree:wght@400;500;700;800&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Dela+Gothic+One&family=Figtree:wght@400;500;700;800&family=JetBrains+Mono:wght@500&family=M+PLUS+1p:wght@300;400&display=swap" rel="stylesheet">
 <style>
 :root{
   --sea:#1f44c9; --sea-deep:#11277a; --sea-lite:#3a67ee; --night:#0a1550;
@@ -168,7 +168,6 @@ section.page{padding:clamp(72px,10vw,128px) clamp(16px,5vw,64px);max-width:1180p
 footer{text-align:center;padding:0 16px 40px;color:var(--on-sea-muted);font-size:.85rem}
 
 @media (max-width:720px){
-  .where{display:none}
   .card .keys{display:none}
   .brand{background:var(--ink);padding:.35rem .8rem .35rem .45rem;border-radius:999px;text-shadow:none}
   .brand svg{width:28px;height:28px}
@@ -177,15 +176,161 @@ footer{text-align:center;padding:0 16px 40px;color:var(--on-sea-muted);font-size
   .profile{grid-template-columns:1fr}
   .gear li{grid-template-columns:1fr}
   .profile svg{max-width:200px}
-  .hud-actions .btn .lbl{display:none}
+}
+@media (max-width:900px){
+  .where,.hud-actions .btn .lbl{display:none}
+  .hud-actions .btn{justify-content:center;min-width:44px;min-height:44px;padding-inline:10px}
+}
+@media (max-width:465px){
+  .hud .brand{justify-content:center;min-width:44px;min-height:44px;padding:0}
+  .hud .brand span{display:none}
 }
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{animation:none!important;transition:none!important}
   html{scroll-behavior:auto}
 }
+/* ---------- console: a cross-bar menu ---------- */
+[hidden]{display:none!important}
+.xmb{
+  --ui:"M PLUS 1p","Figtree",system-ui,sans-serif;
+  --ax:clamp(190px,25vw,480px); --ay:clamp(168px,27svh,250px);
+  --step:clamp(112px,10.5vw,160px);
+  --box:132px; --row:60px; --cur-y:148px; --below-y:236px; --above-y:-98px;
+  --gutter:clamp(20px,3.4vw,48px);
+  --h:max(100svh,680px);
+  position:relative;isolation:isolate;overflow:hidden;height:var(--h);
+  color:#fff;font-family:var(--ui);font-weight:400;text-shadow:0 1px 3px #06103c8c;
+  background:
+    radial-gradient(70% 60% at 12% -8%,#3a67ee 0%,#3a67ee00 70%),
+    linear-gradient(122deg,#2248cf 0%,#1a3bb2 34%,#10257c 70%,#0a1550 100%);
+}
+.xmb :focus-visible{outline-color:#fff}
+.xmb-wave{position:absolute;z-index:-1;inset:0;width:100%;height:100%;pointer-events:none}
+
+.xmb-top{position:absolute;z-index:2;inset:0 0 auto;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:22px var(--gutter) 0;pointer-events:none}
+.xmb-brand{margin:0;font:400 1rem/1 var(--display);letter-spacing:.01em}
+.xmb-clock{display:flex;align-items:center;gap:14px;margin:0;font-size:1.06rem;font-weight:300;font-variant-numeric:tabular-nums;white-space:nowrap}
+.xmb-clock::before{content:"";width:clamp(48px,14vw,220px);height:1px;background:linear-gradient(90deg,#fff0,#fffc)}
+
+.xmb-cross{position:absolute;inset:0;overflow:hidden;touch-action:pan-y;
+  -webkit-mask-image:linear-gradient(#0000 44px,#000 104px,#000 calc(100% - 120px),#0000 calc(100% - 56px));
+  mask-image:linear-gradient(#0000 44px,#000 104px,#000 calc(100% - 120px),#0000 calc(100% - 56px))}
+.xmb-track{position:absolute;left:var(--ax);top:var(--ay);width:0;height:0;transform:translateX(calc(var(--sel) * var(--step) * -1));transition:transform .36s var(--ease);animation:xmb-boot .8s var(--ease) both}
+@keyframes xmb-boot{from{opacity:0;transform:translateX(calc(var(--sel) * var(--step) * -1 + 72px))}}
+
+.xmb-cat{position:absolute;left:calc(var(--i) * var(--step));top:0;width:var(--step);height:80px;margin:-40px 0 0 calc(var(--step) / -2);padding:0;border:0;background:none;color:inherit;font:inherit;text-shadow:inherit;cursor:pointer;display:grid;place-items:center}
+.xmb-cat svg{width:72px;height:72px;opacity:.62;transform:scale(.68);transition:transform .36s var(--ease),opacity .25s;filter:drop-shadow(0 2px 4px #06103c80)}
+.xmb-cat:hover svg{opacity:.9}
+.xmb-cat[aria-selected=true] svg{opacity:1;transform:none;filter:drop-shadow(0 0 9px #ffffff73)}
+.xmb-cat-label{position:absolute;top:100%;left:50%;transform:translateX(-50%);white-space:nowrap;text-align:center;font-size:1rem;line-height:1.3;opacity:0;transition:opacity .25s;pointer-events:none}
+.xmb-cat-label small{display:block;font-size:.82rem;font-weight:300;opacity:.8}
+.xmb-cat:hover .xmb-cat-label,.xmb-cat:focus-visible .xmb-cat-label,.xmb-cat[aria-selected=true] .xmb-cat-label{opacity:1}
+.xmb-cat:not([aria-selected=true]) small{display:none}
+
+.xmb-col{position:absolute;left:calc(var(--i) * var(--step));top:0;opacity:0;visibility:hidden;transition:opacity .18s,visibility 0s .18s}
+.xmb-col.is-active{opacity:1;visibility:visible;transition:opacity .32s .06s}
+.xmb-item{position:absolute;left:calc(var(--box) / -2);top:0;display:flex;align-items:center;gap:16px;height:var(--row);margin-top:calc(var(--row) / -2);padding-right:16px;color:inherit;text-decoration:none;white-space:nowrap;cursor:pointer;opacity:.86;transform:translateY(var(--y));transition:transform .32s var(--ease),opacity .25s}
+.xmb-item:hover{opacity:1}
+.xmb-item.is-above{--y:calc(var(--above-y) + var(--n) * var(--row))}
+.xmb-item.is-below{--y:calc(var(--below-y) + var(--n) * var(--row))}
+.xmb-item.is-current{--y:var(--cur-y);opacity:1}
+.xmb-item:focus{outline:none}
+.xmb-thumb{flex:none;display:grid;place-items:center;width:var(--box)}
+.xmb-tile{position:relative;display:block;width:var(--box);aspect-ratio:16/9;transform:scale(.5);transition:transform .32s var(--ease)}
+.xmb-tile > *{display:block;width:100%;height:100%}
+.xmb-tile img{object-fit:cover;background:var(--ink);box-shadow:0 0 0 1.5px #ffffff59,0 6px 16px #06103c8c}
+.xmb-tile svg{filter:drop-shadow(0 2px 4px #06103c80)}
+.xmb-tile::before{content:"";position:absolute;z-index:-1;inset:-16px -18px;border-radius:50%;background:radial-gradient(closest-side,#ffffff8c,#fff0);opacity:0}
+.is-current .xmb-tile{transform:none}
+.is-active .is-current .xmb-tile::before{opacity:.5;animation:xmb-pulse 2.8s ease-in-out infinite}
+@keyframes xmb-pulse{50%{opacity:.95}}
+.xmb.is-paused .xmb-tile::before{animation-play-state:paused}
+.xmb-item:focus-visible .xmb-tile{outline:2px solid #fff;outline-offset:5px}
+.xmb-text{position:relative;display:block}
+.xmb-name{display:block;font-size:clamp(1.4rem,1.1rem + .75vw,1.8rem);font-weight:400;line-height:1.2;transform-origin:0 50%;transform:scale(.62);transition:transform .32s var(--ease)}
+.is-current .xmb-name{font-weight:300;transform:translateY(-.4em)}
+.xmb-sub{position:absolute;left:0;top:calc(100% - .42em);display:flex;align-items:center;gap:.9em;font-size:.94rem;font-weight:400;opacity:0;transition:opacity .2s}
+.is-current .xmb-sub{opacity:.92;transition:opacity .3s .1s}
+.xmb-sub span{display:inline-flex;align-items:center;gap:.35em}
+.xmb-sub svg{width:1.05em;height:1.05em}
+
+.xmb-detail{position:absolute;z-index:1;left:calc(var(--ax) + clamp(330px,31vw,470px));right:var(--gutter);top:calc(var(--ay) + 76px);max-width:720px}
+.xmb-art{position:relative;aspect-ratio:2.2;width:min(100%,(var(--h) - var(--ay) - 340px) * 2.2);min-width:260px;background:var(--ink);box-shadow:0 0 0 1px #ffffff40,0 20px 56px #050d3aa6}
+.xmb-art img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .4s}
+.xmb-art img.is-on{opacity:1}
+.xmb-detail.no-art .xmb-art{display:none}
+.xmb-desc{max-width:44ch;margin:20px 0 0;font-size:1.12rem;line-height:1.6;text-shadow:0 1px 2px #06103c,0 0 14px #0a1550cc}
+.xmb-detail.no-art .xmb-desc{margin-top:64px;font-size:1.3rem;font-weight:300;line-height:1.5}
+.xmb-command{display:flex;flex-wrap:wrap;align-items:center;gap:8px 10px;margin:14px 0 0}
+.xmb-command code{padding:7px 11px;border-radius:4px;background:#06103c99;font:500 .82rem/1.5 var(--mono);text-shadow:none;overflow-wrap:anywhere}
+.xmb-copy-status{flex-basis:100%;font-size:.88rem}
+.xmb-copy-status:empty{display:none}
+.xmb-btn{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:0 20px;border:1px solid #ffffff8c;border-radius:999px;background:#ffffff1a;color:#fff;font:400 1rem/1.2 var(--ui);text-decoration:none;text-shadow:inherit;cursor:pointer;transition:background-color .2s,color .2s}
+.xmb-btn:hover{background:#fff;color:var(--sea-deep);text-shadow:none}
+.xmb-copy{min-height:36px;min-width:5.2rem;padding:0 14px;font-size:.9rem}
+.xmb-open{margin-top:20px}
+
+.xmb-legend{position:absolute;z-index:2;inset:auto auto 16px var(--gutter);display:flex;align-items:center;gap:8px 28px;font-size:.9rem;font-weight:300}
+.xmb-keys{display:flex;flex-wrap:wrap;gap:4px 22px;margin:0}
+.xmb-keys span{display:inline-flex;align-items:center;gap:5px}
+.xmb-legend kbd{min-width:1.7em;padding:1px 6px;border:1px solid #ffffff80;border-radius:4px;font:400 .8rem/1.5 var(--ui);text-align:center}
+.xmb-motion{min-height:44px;padding:0;border:0;background:none;color:inherit;font:inherit;text-shadow:inherit;text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:.3em;cursor:pointer}
+
+@media (max-width:899px){
+  .xmb{--ax:92px;--ay:150px;--step:100px;--box:104px;--row:54px;--cur-y:124px;--below-y:198px;--above-y:-82px;height:auto;min-height:100svh;display:flex;flex-direction:column}
+  .xmb-top{padding-top:16px}
+  .xmb-brand{font-size:.9rem}
+  .xmb-clock{font-size:.95rem}
+  .xmb-cross{position:relative;inset:auto;flex:none;height:calc(var(--ay) + var(--below-y) + var(--row) * 1.35);
+    -webkit-mask-image:linear-gradient(#0000 38px,#000 84px,#000 calc(100% - 84px),#0000 calc(100% - 8px));
+    mask-image:linear-gradient(#0000 38px,#000 84px,#000 calc(100% - 84px),#0000 calc(100% - 8px))}
+  .xmb-cat svg{width:60px;height:60px}
+  .xmb-cat-label{font-size:.95rem}
+  .xmb-name{font-size:1.42rem}
+  .xmb-sub{font-size:.88rem}
+  .xmb-detail{position:relative;inset:auto;max-width:none;padding:4px 20px 0}
+  .xmb-art{width:100%;min-width:0}
+  .xmb-desc,.xmb-detail.no-art .xmb-desc{max-width:60ch;margin-top:16px;font-size:1.05rem;font-weight:400;line-height:1.55}
+  .xmb-open{margin-top:16px}
+  .xmb-legend{position:relative;inset:auto;justify-content:flex-end;margin-top:auto;padding:14px 20px 12px}
+}
+@media (pointer:coarse){.xmb-keys{display:none}}
 </style>
 </head>
-<body>
+<body id="top">
+
+<section class="xmb" id="console" aria-labelledby="console-title" hidden>
+  <canvas class="xmb-wave" id="xmb-wave" aria-hidden="true"></canvas>
+  <header class="xmb-top">
+    <h1 class="xmb-brand" id="console-title">Bombatomica64</h1>
+    <p class="xmb-clock"><time id="xmb-clock"></time></p>
+  </header>
+  <div class="xmb-cross" id="xmb-cross">
+    <div class="xmb-track" id="xmb-track" style="--sel:1">
+      <div id="xmb-cats" role="tablist" aria-label="Sections"></div>
+      <div id="xmb-cols"></div>
+    </div>
+  </div>
+  <article class="xmb-detail" id="xmb-detail" aria-labelledby="xmb-title">
+    <div class="xmb-art" id="xmb-art"><img alt="" width="1100" height="500"><img alt="" width="1100" height="500"></div>
+    <div id="xmb-info">
+      <div aria-live="polite" aria-atomic="true">
+        <h2 class="sr" id="xmb-title"></h2>
+        <p class="xmb-desc" id="xmb-desc"></p>
+      </div>
+      <div class="xmb-command" id="xmb-command" hidden>
+        <code id="xmb-code"></code>
+        <button class="xmb-btn xmb-copy" id="xmb-copy" type="button"><span aria-live="polite">Copy</span></button>
+        <span class="xmb-copy-status" id="xmb-copy-status" role="status"></span>
+      </div>
+      <a class="xmb-btn xmb-open" id="xmb-open"></a>
+    </div>
+  </article>
+  <footer class="xmb-legend">
+    <p class="xmb-keys"><span><kbd>←</kbd><kbd>→</kbd> Sections</span><span><kbd>↑</kbd><kbd>↓</kbd> Items</span><span><kbd>Enter</kbd> Open</span></p>
+    <button class="xmb-motion" id="xmb-motion" type="button">Pause motion</button>
+  </footer>
+</section>
 
 <div class="stage" id="stage">
   <svg id="map" role="img" aria-label="World map of Lorenzo's projects: four islands, sixteen levels connected by a dotted path." preserveAspectRatio="xMidYMid meet"></svg>
@@ -193,12 +338,13 @@ footer{text-align:center;padding:0 16px 40px;color:var(--on-sea-muted);font-size
   <header class="hud">
     <a class="brand" href="#top" aria-label="Bombatomica64 home">
       <svg viewBox="0 0 64 64" aria-hidden="true"><circle cx="28" cy="38" r="20" fill="#0c0f2e"/><circle cx="21" cy="31" r="6" fill="#3a67ee"/><rect x="34" y="12" width="12" height="10" rx="3" transform="rotate(35 40 17)" fill="#0c0f2e"/><path d="M44 12c4-6 10-6 12-2" stroke="#fff8e8" stroke-width="3" fill="none" stroke-linecap="round"/><circle cx="57" cy="9" r="5" fill="#ffd23f"/></svg>
-      Bombatomica64
+      <span>Bombatomica64</span>
     </a>
     <div class="where" id="where" aria-live="polite">World 1 · Piscine Isles</div>
-    <nav class="hud-actions">
-      <button class="btn" id="mapBtn" type="button" aria-pressed="false"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M1 3l4.5-1.5 5 1.5L15 1.5v11.5L10.5 14.5 5.5 13 1 14.5z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M5.5 1.5v11.5M10.5 3v11.5" stroke="currentColor" stroke-width="1.6"/></svg><span class="lbl">Map</span></button>
-      <a class="btn" href="#profile"><svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="5" r="3" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M2 15c.8-3.4 3.2-5 6-5s5.2 1.6 6 5" fill="none" stroke="currentColor" stroke-width="1.6"/></svg><span class="lbl">Player file</span></a>
+    <nav class="hud-actions" aria-label="World map">
+      <button class="btn" id="open-console" type="button" aria-label="Console" hidden><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M1 5h14M5 1.500v13" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><rect x="3" y="3" width="4" height="4" rx="1" fill="currentColor"/></svg><span class="lbl">Console</span></button>
+      <button class="btn" id="mapBtn" type="button" aria-label="Map overview" aria-pressed="false"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M1 3l4.5-1.5 5 1.5L15 1.5v11.5L10.5 14.5 5.5 13 1 14.5z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M5.5 1.5v11.5M10.5 3v11.5" stroke="currentColor" stroke-width="1.6"/></svg><span class="lbl">Map</span></button>
+      <a class="btn" href="#profile" aria-label="Player file"><svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="5" r="3" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M2 15c.8-3.4 3.2-5 6-5s5.2 1.6 6 5" fill="none" stroke="currentColor" stroke-width="1.6"/></svg><span class="lbl">Player file</span></a>
     </nav>
   </header>
 
@@ -263,7 +409,7 @@ footer{text-align:center;padding:0 16px 40px;color:var(--on-sea-muted);font-size
     </div>
   </section>
 
-  <section class="page" aria-labelledby="invH">
+  <section class="page" id="inventory" aria-labelledby="invH">
     <h2 id="invH">Inventory</h2>
     <p class="lede">Gear picked up along the way, and where it gets used. Underlined names warp to that level on the map.</p>
     <ul class="gear">
@@ -276,7 +422,7 @@ footer{text-align:center;padding:0 16px 40px;color:var(--on-sea-muted);font-size
     </ul>
   </section>
 
-  <section class="page" aria-labelledby="saveH">
+  <section class="page" id="saves" aria-labelledby="saveH">
     <h2 id="saveH">Save points</h2>
     <p class="lede">The run so far, by year of last activity on GitHub.</p>
     <ol class="saves">
@@ -350,6 +496,7 @@ el('rect', { x: -3000, y: -3000, width: 7600, height: 7000, fill: C('sea') }, gS
 
 const gLand = el('g', {}, svg);
 const gDeco = el('g', {}, svg);
+const gLabels = el('g', {}, svg);
 worlds.forEach((w, i) => {
   const g = el('g', {}, gLand);
   el('path', { d: blob(w.cx, w.cy, w.rx * 1.16, w.ry * 1.2, w.seed), fill: C('sea-lite') }, g);
@@ -360,7 +507,7 @@ worlds.forEach((w, i) => {
   el('path', { d: blob(w.cx, w.cy - 4, w.rx * .84, w.ry * .78, w.seed + 7, .36), fill: C(top[0]) }, g);
   el('path', { d: blob(w.cx - 6, w.cy - 14, w.rx * .8, w.ry * .7, w.seed + 7, .36), fill: C(top[1]) }, g);
   if (w.kind !== 'rock') el('path', { d: blob(w.cx - 30, w.cy - 30, w.rx * .4, w.ry * .34, w.seed + 13, .4), fill: C('grass-lt'), opacity: .7 }, g);
-  const lbl = el('text', { x: w.label[0], y: w.label[1], 'text-anchor': 'middle', 'font-family': 'Dela Gothic One, sans-serif', 'font-size': 30, fill: C('paper'), stroke: C('ink'), 'stroke-width': 8, 'paint-order': 'stroke', 'stroke-linejoin': 'round' }, gDeco);
+  const lbl = el('text', { x: w.label[0], y: w.label[1], 'text-anchor': 'middle', 'font-family': 'Dela Gothic One, sans-serif', 'font-size': 30, fill: C('paper'), stroke: C('ink'), 'stroke-width': 8, 'paint-order': 'stroke', 'stroke-linejoin': 'round' }, gLabels);
   lbl.textContent = `WORLD ${i + 1} · ${w.name.toUpperCase()}`;
 });
 
@@ -418,6 +565,8 @@ for (let i = 0; i < levels.length - 1; i++) {
 /* level nodes */
 const gNodes = el('g', {}, svg);
 const star = 'M0,-11 L3.2,-3.6 11,-3.4 4.8,1.6 7,9.4 0,5 -7,9.4 -4.8,1.6 -11,-3.4 -3.2,-3.6Z';
+const trophy = 'M7 4h10v5a5 5 0 0 1-10 0V4Zm0 2H3v2a4 4 0 0 0 4 4m10-6h4v2a4 4 0 0 1-4 4m-5 2v5m-4 1h8';
+const completedStatus = 'Platinum trophy';
 const nodes = levels.map((l, i) => {
   const g = el('g', { class: 'node', transform: `translate(${l.x},${l.y})`, tabindex: 0, role: 'button', 'aria-label': `Level ${l.w + 1}-${levels.filter((m, j) => m.w === l.w && j <= i).length}: ${l.t}` }, gNodes);
   el('circle', { class: 'ring', r: 30, fill: 'none', stroke: C('gold'), 'stroke-width': 5 }, g);
@@ -473,7 +622,7 @@ function show(i) {
   const code = $('lvCode'); code.hidden = !l.code; code.textContent = l.code || '';
   const ico = l.st === 'wip'
     ? '<svg viewBox="0 0 12 12"><path d="M3 1v10M3 1.5l7 2.5-7 2.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>In progress'
-    : '<svg viewBox="-12 -12 24 24"><path d="' + star + '" fill="currentColor"/></svg>Cleared';
+    : `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="${trophy}" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>${completedStatus}`;
   $('lvMeta').innerHTML = `<span class="tag">Level ${l.w + 1}-${n}</span><span class="tag">${w.name}</span><span class="tag">${l.lang}</span><span class="tag ${l.st}">${ico}</span>`;
   $('enter').href = l.url;
   $('where').textContent = `World ${l.w + 1} · ${w.name}`;
@@ -495,7 +644,7 @@ function travelTo(target) {
 
 function begin() {
   if (started) return; started = true;
-  $('title').classList.add('gone'); $('stage').classList.add('on');
+  $('title').classList.add('gone'); $('title').inert = true; $('stage').classList.add('on');
   setMap(false); show(here);
 }
 
@@ -503,7 +652,9 @@ function setMap(on) { mapMode = on; $('mapBtn').setAttribute('aria-pressed', on)
 
 /* ---------- loop ---------- */
 let last = performance.now();
+let frameId;
 function frame(now) {
+  if ($('stage').hidden) return;
   const dt = Math.min(.05, (now - last) / 1000); last = now;
   if (walk) {
     const st = walk.steps[walk.k]; walk.t += dt * 420;
@@ -525,10 +676,352 @@ function frame(now) {
 
   if (!reduce) clouds.forEach(c => { c.x += c.v * dt; if (c.x > W + 300) c.x = -300; c.g.setAttribute('transform', `translate(${c.x.toFixed(1)},${c.y})`); });
   else clouds.forEach(c => c.g.setAttribute('transform', `translate(${c.x},${c.y})`));
-  requestAnimationFrame(frame);
+  frameId = requestAnimationFrame(frame);
 }
-requestAnimationFrame(frame);
 show(0);
+
+/* ---------- console: a cross-bar menu ---------- */
+const consoleView = $('console');
+const track = $('xmb-track');
+const detailView = $('xmb-detail');
+const commandRow = $('xmb-command');
+const commandCode = $('xmb-code');
+const copyLabel = $('xmb-copy').querySelector('span');
+const copyStatus = $('xmb-copy-status');
+const openLink = $('xmb-open');
+const motionToggle = $('xmb-motion');
+const motionOK = matchMedia('(prefers-reduced-motion: no-preference)');
+
+const FOAM = [230, 239, 255];
+const line = (d, box = '0 0 24 24') => `<svg viewBox="${box}" aria-hidden="true"><path d="${d}" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+const glyph = d => line(d, '-9.33 0 42.67 24');
+const solid = body => `<svg viewBox="0 0 48 48" aria-hidden="true" fill="currentColor" stroke-linecap="round" stroke-linejoin="round">${body}</svg>`;
+const worldSkin = [
+  { sub: 'C at 42 school', tint: [127, 220, 114], icon: solid('<path d="M5 37c3.500-6.500 10.500-10 19-10s15.500 3.500 19 10z"/><path d="M24.500 28c.8-6-.2-11.500-2.500-16" fill="none" stroke="currentColor" stroke-width="2.6"/><path d="M22 12c-4.500-3.600-9.600-3-12 .6 4-.8 8 .2 12-.6zm0 0c1-5 5-7.600 9.600-6.600-3.600 1.500-6 4-9.600 6.600zm0 0c4.600-1.500 9.200-.2 11.200 3.600-3.600-1.800-7.200-2-11.200-3.600zm0 0c-2.600 2-3.600 5.600-2.600 9.200.5-3.600 1.500-6.200 2.600-9.200z" stroke="currentColor" stroke-width="1.2"/><path d="M4 42.500h40" fill="none" stroke="currentColor" stroke-width="2.4"/>') },
+  { sub: 'Rust', tint: [210, 185, 236], icon: solid('<path d="M3 41 17.500 18h4l2.500 3.500 2.500-3.500h4L45 41z" stroke="currentColor" stroke-width="1.6"/><circle cx="26" cy="10.500" r="3.600"/><circle cx="20.500" cy="6" r="2.400"/>') },
+  { sub: 'Desktop widgets', tint: [244, 214, 140], icon: solid('<path d="M19.500 40.500l2-20h5l2 20zm.5-28h8v5.500h-8zm-2 0 6-6.500 6 6.500z" stroke="currentColor" stroke-width="1.4"/><path d="M16.500 14 6 10.500M31.500 14 42 10.500M16.500 17 7 19m24.500-2 9.500 2M9 42.500h30" fill="none" stroke="currentColor" stroke-width="2.2"/>') },
+  { sub: 'AI agent tooling', tint: [255, 122, 184], icon: solid('<path d="M4 33h40l-6.500 9h-25zM22.500 4v25H8zM26 11l13 18H26z" stroke="currentColor" stroke-width="1.4"/>') },
+];
+const levelIndex = (world, level) => levels.filter((l, i) => l.w === world && i < level).length;
+const cats = [
+  { name: 'Player', sub: 'About me', tint: FOAM,
+    icon: solid('<path fill-rule="evenodd" d="M20 16a14 14 0 1 0 .01 0zm-5 5.600a3.400 3.400 0 1 0 .01 0z"/><path d="M27 15l4.500-6.500 6 4.200-4.500 6.500z"/><path d="M34.500 10.500c1.500-3.500 4.500-4.600 7-3.200" fill="none" stroke="currentColor" stroke-width="2.4"/><path d="M43 1.500l1.100 3.400 3.400 1.100-3.400 1.100-1.100 3.400-1.100-3.400-3.400-1.100 3.400-1.100z"/>'),
+    items: [
+      { t: 'Lorenzo Micheli', sub: 'Player file', d: 'Trained at 42 on C, writing Rust for fun, keeping containers alive at Instal.', href: '#profile', go: 'Read the player file', glyph: glyph('M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8zm-7.500 8c.9-3.800 3.700-6 7.500-6s6.600 2.200 7.500 6') },
+      { t: 'Inventory', sub: 'Languages and tools', d: 'Rust, C and C++, TypeScript, Python, Docker, Kubernetes and CI/CD, each with the projects it gets used in.', href: '#inventory', go: 'Open the inventory', glyph: glyph('M4 10a4 4 0 0 1 4-4h8a4 4 0 0 1 4 4v9H4zm0 3h16m-9-2h2v4h-2z') },
+      { t: 'Save points', sub: '2023 to 2026', d: 'The run so far, by year of last activity on GitHub.', href: '#saves', go: 'Open the save points', glyph: glyph('M6 21V4m0 1 12 4-12 4') },
+      { t: 'Overworld map', sub: 'Four islands, sixteen levels', d: 'The same projects as a map you can walk, joined by a dotted path from so_long to the newest agent skill.', href: '#top', go: 'Open the map', run: openMap, glyph: glyph('M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2zm6-2v14m6-12v14') },
+    ] },
+  ...worlds.map((w, i) => ({ name: w.name, ...worldSkin[i], items: levels.flatMap((l, j) => l.w === i ? [{
+    t: l.t, d: l.d, code: l.code, href: l.url, ext: true, go: 'View on GitHub', level: j, lang: l.lang, st: l.st,
+    art: `previews/${l.url.slice(GH.length).toLowerCase()}.webp`,
+  }] : []) })),
+  { name: 'Network', sub: 'Find me online', tint: FOAM,
+    icon: solid('<g fill="none" stroke="currentColor" stroke-width="2.4"><circle cx="24" cy="24" r="18"/><ellipse cx="24" cy="24" rx="8" ry="18"/><path d="M6 24h36M9.500 14h29m-29 20h29"/></g>'),
+    items: [
+      { t: 'GitHub', sub: 'Bombatomica64', d: 'Every project here, with its source and its history.', href: 'https://github.com/Bombatomica64', ext: true, go: 'Open GitHub', glyph: glyph('M9 6 3 12l6 6m6-12 6 6-6 6') },
+      { t: 'Instagram', sub: 'lorenzo.micheli01', d: 'Anything that is not code is a DM away.', href: 'https://instagram.com/lorenzo.micheli01', ext: true, go: 'Open Instagram', glyph: glyph('M4 8h3l2-3h6l2 3h3v11H4zm8 8.500a3.500 3.500 0 1 0 0-7 3.500 3.500 0 0 0 0 7z') },
+    ] },
+];
+const pick = cats.map(() => 0);
+let cat = -1;
+
+function place(c) {
+  cats[c].els.forEach((item, j) => {
+    const n = j - pick[c];
+    item.classList.toggle('is-above', n < 0);
+    item.classList.toggle('is-current', n === 0);
+    item.classList.toggle('is-below', n > 0);
+    item.style.setProperty('--n', n < 0 ? n + 1 : n > 0 ? n - 1 : 0);
+    item.tabIndex = n ? -1 : 0;
+    if (n) item.removeAttribute('aria-current'); else item.setAttribute('aria-current', 'true');
+  });
+}
+
+cats.forEach((c, i) => {
+  c.tab = document.createElement('button');
+  c.tab.type = 'button';
+  c.tab.className = 'xmb-cat';
+  c.tab.id = `xmb-tab-${i}`;
+  c.tab.setAttribute('role', 'tab');
+  c.tab.setAttribute('aria-controls', `xmb-col-${i}`);
+  c.tab.style.setProperty('--i', i);
+  c.tab.innerHTML = `${c.icon}<span class="xmb-cat-label">${c.name}<small>${c.sub}</small></span>`;
+  c.tab.addEventListener('click', () => select(i));
+  $('xmb-cats').append(c.tab);
+
+  c.col = document.createElement('div');
+  c.col.className = 'xmb-col';
+  c.col.id = `xmb-col-${i}`;
+  c.col.setAttribute('role', 'tabpanel');
+  c.col.setAttribute('aria-labelledby', c.tab.id);
+  c.col.style.setProperty('--i', i);
+  c.els = c.items.map((item, j) => {
+    const a = document.createElement('a');
+    a.className = 'xmb-item';
+    a.href = item.href;
+    if (item.ext) { a.target = '_blank'; a.rel = 'noopener'; }
+    const thumb = item.art ? `<img src="${item.art}" alt="" width="1100" height="500" decoding="async">` : item.glyph;
+    const sub = !item.lang ? item.sub
+      : `${item.lang}<span>${item.st === 'done' ? `${line(trophy)}${completedStatus}` : 'In progress'}</span>`;
+    a.innerHTML = `<span class="xmb-thumb"><span class="xmb-tile">${thumb}</span></span><span class="xmb-text"><span class="xmb-name"></span><span class="xmb-sub">${sub}</span></span>`;
+    a.querySelector('.xmb-name').textContent = item.t;
+    a.addEventListener('click', event => {
+      if (i !== cat || j !== pick[i]) { event.preventDefault(); select(i, j, true); }
+      else if (item.run) { event.preventDefault(); item.run(); }
+    });
+    c.col.append(a);
+    return a;
+  });
+  $('xmb-cols').append(c.col);
+  place(i);
+});
+
+/* preview: two stacked images that crossfade once the selection settles */
+const artImages = [...$('xmb-art').querySelectorAll('img')];
+let artOn = 0, artJob = 0, artTimer;
+function showArt(item, wait) {
+  clearTimeout(artTimer);
+  const job = ++artJob;
+  detailView.classList.toggle('no-art', !item.art);
+  if (!item.art) return;
+  const now = artImages[artOn];
+  if (now.dataset.src === item.art) { now.classList.add('is-on'); return; }
+  artTimer = setTimeout(() => {
+    const next = artImages[1 - artOn];
+    next.dataset.src = next.src = item.art;
+    const swap = () => {
+      if (job !== artJob) return;
+      now.classList.remove('is-on'); now.alt = '';
+      next.classList.add('is-on'); next.alt = `${item.t} preview`;
+      artOn = 1 - artOn;
+    };
+    next.decode().then(swap, swap);
+  }, wait);
+}
+
+function select(c, j, focus = false) {
+  c = Math.max(0, Math.min(cats.length - 1, c));
+  if (j === undefined) j = pick[c];
+  j = Math.max(0, Math.min(cats[c].items.length - 1, j));
+  const first = cat === -1;
+  const dx = first ? 0 : Math.sign(c - cat);
+  const dy = dx ? 0 : Math.sign(j - pick[c]);
+  if (first || dx || dy) {
+    cat = c; pick[c] = j;
+    place(c);
+    track.style.setProperty('--sel', c);
+    cats.forEach((k, i) => {
+      k.tab.setAttribute('aria-selected', i === c);
+      k.tab.tabIndex = i === c ? 0 : -1;
+      k.col.classList.toggle('is-active', i === c);
+      k.col.inert = i !== c;
+    });
+    const item = cats[c].items[j];
+    $('xmb-title').textContent = item.t;
+    $('xmb-desc').textContent = item.d;
+    commandRow.hidden = !item.code;
+    commandCode.textContent = item.code || '';
+    copyLabel.textContent = 'Copy';
+    copyStatus.textContent = '';
+    openLink.textContent = item.go;
+    openLink.href = item.href;
+    if (item.ext) { openLink.target = '_blank'; openLink.rel = 'noopener'; }
+    else { openLink.removeAttribute('target'); openLink.removeAttribute('rel'); }
+    showArt(item, first ? 0 : 130);
+    const info = $('xmb-info');
+    info.getAnimations().forEach(animation => animation.cancel());
+    if (!first && motionOK.matches) info.animate(
+      [{ transform: `translate(${dx * 22}px, ${dy * 12}px)`, opacity: 0 }, { transform: 'none', opacity: 1 }],
+      { duration: 340, easing: 'cubic-bezier(.16,1,.3,1)' });
+    tintTo = cats[c].tint;
+    if (!waveFrameId) { tint = [...tintTo]; drawWave(); }
+  }
+  if (focus) cats[c].els[j].focus({ preventScroll: true });
+}
+
+openLink.addEventListener('click', event => {
+  const item = cats[cat].items[pick[cat]];
+  if (item.run) { event.preventDefault(); item.run(); }
+});
+
+$('xmb-copy').addEventListener('click', async () => {
+  const command = commandCode.textContent;
+  copyStatus.textContent = '';
+  try {
+    await navigator.clipboard.writeText(command);
+    if (commandCode.textContent === command) copyLabel.textContent = 'Copied';
+  } catch {
+    if (commandCode.textContent !== command) return;
+    copyLabel.textContent = 'Copy';
+    const range = document.createRange();
+    range.selectNodeContents(commandCode);
+    const selection = window.getSelection();
+    selection.removeAllRanges();
+    selection.addRange(range);
+    copyStatus.textContent = 'Command selected. Use your device’s copy shortcut.';
+  }
+});
+
+/* the wave: one ribbon of fine lines that twists as it drifts, tinted by the open world */
+const waveCanvas = $('xmb-wave');
+const waveCtx = waveCanvas.getContext('2d');
+let waveW = 0, waveH = 0, waveT = 40, waveFrameId = 0, waveLast = 0;
+let tint = [...FOAM], tintTo = FOAM;
+let motionPaused = false, consoleInView = true;
+
+function drawWave() {
+  if (!waveW) return;
+  const ctx = waveCtx, t = waveT;
+  ctx.clearRect(0, 0, waveW, waveH);
+  ctx.globalCompositeOperation = 'lighter';
+  const [r, g, b] = tint.map(v => Math.round(v * .55 + 115));
+  const seg = Math.max(8, waveW / 130), span = Math.max(waveW, 900), amp = Math.min(waveH * .15, 150);
+  const dim = waveW < 900 ? .6 : 1; /* on phones the ribbon runs behind body text */
+  /* back ribbon first, then the front one over it */
+  [[.58, .7, 3.1, .45, 34], [.66, 1, 0, 1, 56]].forEach(([level, size, phase, glow, lines]) => {
+    const mid = waveH * level, a = amp * size;
+    const curve = q => {
+      const points = [];
+      for (let x = -seg; x <= waveW + seg; x += seg) {
+        const u = x / span + phase;
+        points.push(x, mid
+          + a * .6 * Math.sin(u * 3.7 + t * .2)
+          + a * .52 * Math.sin(u * 1.5 - t * .12 + 2.1)
+          + q * a * 1.4 * Math.sin(u * 2.6 - t * .085 + .9)
+          + q * q * a * .9 * Math.sin(u * 5.1 + t * .16));
+      }
+      return points;
+    };
+    const top = curve(-.5), bottom = curve(.5);
+    ctx.beginPath();
+    for (let k = 0; k < top.length; k += 2) ctx.lineTo(top[k], top[k + 1]);
+    for (let k = bottom.length - 2; k >= 0; k -= 2) ctx.lineTo(bottom[k], bottom[k + 1]);
+    ctx.fillStyle = `rgba(${r},${g},${b},${.1 * glow * dim})`;
+    ctx.fill();
+    ctx.lineWidth = 1.1;
+    for (let i = 0; i < lines; i++) {
+      const q = i / (lines - 1) - .5, edge = Math.abs(q) * 2, points = i ? i === lines - 1 ? bottom : curve(q) : top;
+      ctx.beginPath();
+      for (let k = 0; k < points.length; k += 2) ctx.lineTo(points[k], points[k + 1]);
+      ctx.strokeStyle = `rgba(${r},${g},${b},${((.035 + .2 * edge ** 3) * glow * dim).toFixed(3)})`;
+      ctx.stroke();
+    }
+  });
+}
+
+function waveFrame(now) {
+  const dt = Math.min(.05, (now - waveLast) / 1000);
+  waveLast = now;
+  waveT += dt;
+  tint = tint.map((v, k) => v + (tintTo[k] - v) * Math.min(1, dt * 2.2));
+  drawWave();
+  waveFrameId = requestAnimationFrame(waveFrame);
+}
+
+function updateMotion() {
+  const run = motionOK.matches && !motionPaused && consoleInView && !document.hidden && !consoleView.hidden;
+  if (run && !waveFrameId) { waveLast = performance.now(); waveFrameId = requestAnimationFrame(waveFrame); }
+  if (!run && waveFrameId) { cancelAnimationFrame(waveFrameId); waveFrameId = 0; }
+  consoleView.classList.toggle('is-paused', !run);
+  motionToggle.hidden = !motionOK.matches;
+  motionToggle.textContent = motionPaused ? 'Resume motion' : 'Pause motion';
+}
+
+new ResizeObserver(() => {
+  const dpr = Math.min(devicePixelRatio || 1, 2);
+  waveW = consoleView.clientWidth; waveH = consoleView.clientHeight;
+  waveCanvas.width = waveW * dpr; waveCanvas.height = waveH * dpr;
+  waveCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  drawWave();
+}).observe(consoleView);
+new IntersectionObserver(([entry]) => { consoleInView = entry.isIntersecting; updateMotion(); }).observe(consoleView);
+document.addEventListener('visibilitychange', updateMotion);
+motionOK.addEventListener('change', updateMotion);
+motionToggle.addEventListener('click', () => { motionPaused = !motionPaused; updateMotion(); });
+
+const clock = $('xmb-clock');
+function tick() {
+  const d = new Date(), two = n => String(n).padStart(2, '0');
+  clock.dateTime = d.toISOString();
+  clock.textContent = `${d.getDate()}/${d.getMonth() + 1} ${two(d.getHours())}:${two(d.getMinutes())}`;
+}
+tick();
+setInterval(tick, 15000);
+
+/* switching between the console and the map */
+function jumpToMapProject(index) {
+  walk = null;
+  here = index;
+  pos.x = levels[index].x;
+  pos.y = levels[index].y;
+  $('card').classList.remove('walking');
+  setMap(false);
+  show(index);
+}
+
+function openMap() {
+  const level = cats[cat].items[pick[cat]].level;
+  consoleView.hidden = true;
+  $('stage').hidden = false;
+  begin();
+  if (level === undefined) setMap(true); else jumpToMapProject(level);
+  $('open-console').hidden = false;
+  $('open-console').focus();
+  updateMotion();
+  last = performance.now();
+  frameId = requestAnimationFrame(frame);
+}
+
+function selectLevel(index, focus) { select(levels[index].w + 1, levelIndex(levels[index].w, index), focus); }
+
+$('open-console').addEventListener('click', () => {
+  $('stage').hidden = true;
+  cancelAnimationFrame(frameId);
+  consoleView.hidden = false;
+  selectLevel(walk ? walk.to : here, true);
+  updateMotion();
+});
+
+consoleView.hidden = false;
+$('stage').hidden = true;
+select(1, 0);
+updateMotion();
+
+/* swipe sideways to change section; vertical drags stay with the page */
+const cross = $('xmb-cross');
+let swipe = null, swiped = false;
+cross.addEventListener('pointerdown', event => { if (event.pointerType !== 'mouse') swipe = { x: event.clientX, y: event.clientY }; });
+cross.addEventListener('pointercancel', () => { swipe = null; });
+cross.addEventListener('pointerup', event => {
+  if (!swipe) return;
+  const dx = event.clientX - swipe.x, dy = event.clientY - swipe.y;
+  swipe = null;
+  if (Math.abs(dx) < 44 || Math.abs(dx) < Math.abs(dy) * 1.5) return;
+  swiped = true;
+  setTimeout(() => { swiped = false; }, 350);
+  select(cat - Math.sign(dx));
+});
+cross.addEventListener('click', event => { if (swiped) { event.preventDefault(); event.stopPropagation(); } }, true);
+
+addEventListener('keydown', event => {
+  if (consoleView.hidden || event.altKey || event.ctrlKey || event.metaKey || event.shiftKey) return;
+  const target = event.target, key = event.key;
+  const box = consoleView.getBoundingClientRect();
+  if (!consoleView.contains(target) && (target !== document.body || box.top < -box.height / 2)) return;
+  const onItem = target.classList.contains('xmb-item');
+  let c = cat, j = pick[cat];
+  if (key === 'ArrowLeft') c--;
+  else if (key === 'ArrowRight') c++;
+  else if (key === 'ArrowUp') j--;
+  else if (key === 'ArrowDown') j++;
+  else if (key === 'Home' && onItem) j = 0;
+  else if (key === 'End' && onItem) j = cats[cat].items.length - 1;
+  else if (key === 'Enter' && target === document.body) { event.preventDefault(); cats[cat].els[j].click(); return; }
+  else return;
+  event.preventDefault();
+  if (c !== cat) select(c, undefined, true); else select(c, j, true);
+});
 
 /* ---------- input ---------- */
 $('start').addEventListener('click', begin);
@@ -537,14 +1030,15 @@ $('next').addEventListener('click', () => { begin(); travelTo((walk ? walk.to : 
 $('mapBtn').addEventListener('click', () => { begin(); setMap(!mapMode); });
 document.querySelectorAll('a[data-lv]').forEach(a => a.addEventListener('click', e => {
   const i = levels.findIndex(l => l.t === a.dataset.lv); if (i < 0) return;
-  e.preventDefault(); begin();
-  walk = null; here = i; pos.x = levels[i].x; pos.y = levels[i].y; $('card').classList.remove('walking'); setMap(false); show(i);
-  $('stage').scrollIntoView({ behavior: reduce ? 'auto' : 'smooth' });
+  e.preventDefault();
+  if (consoleView.hidden) jumpToMapProject(i); else selectLevel(i);
+  (consoleView.hidden ? $('stage') : consoleView).scrollIntoView({ behavior: reduce ? 'auto' : 'smooth' });
+  (consoleView.hidden ? $('enter') : cats[cat].els[pick[cat]]).focus({ preventScroll: true });
 }));
 let mapVisible = true;
 new IntersectionObserver(([e]) => { mapVisible = e.isIntersecting && e.intersectionRatio > .5; }, { threshold: [0, .5, 1] }).observe($('stage'));
 addEventListener('keydown', e => {
-  if (!mapVisible || e.metaKey || e.ctrlKey || e.altKey) return;
+  if (!$('console').hidden || !mapVisible || e.metaKey || e.ctrlKey || e.altKey) return;
   const tag = document.activeElement && document.activeElement.tagName;
   if (!started && e.key === 'Enter') { e.preventDefault(); begin(); return; }
   if (e.key === 'ArrowRight' || e.key === 'd') { e.preventDefault(); begin(); travelTo((walk ? walk.to : here) + 1); }

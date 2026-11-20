@@ -2,4 +2,5 @@
 FROM nginxinc/nginx-unprivileged:1.29.3-alpine
 COPY nginx/default.conf /etc/nginx/conf.d/default.conf
 COPY index.html og.png /usr/share/nginx/html/
+COPY previews/ /usr/share/nginx/html/previews/
 EXPOSE 8080
