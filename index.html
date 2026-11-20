@@ -239,7 +239,11 @@ footer{text-align:center;padding:0 16px 40px;color:var(--on-sea-muted);font-size
 .console-status{display:inline-flex;align-items:center;gap:.35rem}
 .console-status:has(svg){color:var(--foam)}
 .console-status svg{width:18px;height:18px}
-.console-detail code{display:block;max-width:100%;width:fit-content;margin:0 0 12px;padding:7px 10px;border-radius:6px;background:var(--ink);color:var(--foam);font:500 .78rem/1.5 var(--mono);overflow-wrap:anywhere}
+.console-command{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:.45rem;width:fit-content;max-width:100%;margin:0 0 12px}
+.console-command code{display:block;padding:7px 10px;border-radius:6px;background:var(--ink);color:var(--foam);font:500 .78rem/1.5 var(--mono);overflow-wrap:anywhere}
+.console-copy{min-width:4.75rem;padding-inline:.55rem}
+.console-copy-status{grid-column:1/-1;color:var(--foam);font-size:.85rem}
+.console-copy-status:empty{display:none}
 .console-open{background:var(--gold);border-color:var(--gold);color:var(--ink)}
 .console-open:hover{background:var(--sand);border-color:var(--sand)}
 .console-footer{display:flex;justify-content:space-between;align-items:center;gap:16px;min-height:60px;padding:10px 0;border-top:1px solid #e6efff30;color:var(--on-sea-muted);font-size:.85rem}
@@ -311,7 +315,11 @@ footer{text-align:center;padding:0 16px 40px;color:var(--on-sea-muted);font-size
           <h2 id="console-project-title"></h2>
           <p class="console-meta"><span id="console-project-language"></span><span aria-hidden="true">·</span><span class="console-status" id="console-project-status"></span></p>
           <p id="console-project-description"></p>
-          <code id="console-project-code" hidden></code>
+        </div>
+        <div class="console-command" id="console-command" hidden>
+          <code id="console-project-code"></code>
+          <button class="console-control console-copy" id="console-copy" type="button"><span aria-live="polite">Copy</span></button>
+          <span class="console-copy-status" id="console-copy-status" role="status"></span>
         </div>
         <a class="console-control console-open" id="console-project-link" target="_blank" rel="noopener">View on GitHub</a>
       </article>
@@ -678,6 +686,10 @@ show(0);
 const consoleView = $('console');
 const projectList = $('console-list');
 const projectDetail = $('console-detail');
+const consoleCommand = $('console-command');
+const commandCode = $('console-project-code');
+const copyLabel = $('console-copy').querySelector('span');
+const copyStatus = $('console-copy-status');
 const consoleMotion = matchMedia('(prefers-reduced-motion: no-preference)');
 const waveToggle = $('wave-toggle');
 let waveInView = false;
@@ -784,8 +796,10 @@ function selectProject(index, direction = Math.sign(index - selectedProject)) {
   if (project.st === 'done') status.replaceChildren(consoleIcon(trophy, 24), completedStatus);
   else status.textContent = 'In progress';
   $('console-project-description').textContent = project.d;
-  $('console-project-code').hidden = !project.code;
-  $('console-project-code').textContent = project.code || '';
+  consoleCommand.hidden = !project.code;
+  commandCode.textContent = project.code || '';
+  copyLabel.textContent = 'Copy';
+  copyStatus.textContent = '';
   $('console-project-link').href = project.url;
   const art = $('console-art');
   art.src = `previews/${project.url.slice(GH.length).toLowerCase()}.webp`;
@@ -795,6 +809,24 @@ function selectProject(index, direction = Math.sign(index - selectedProject)) {
   if (changesWorld) slideSelection(projectList, 20 * direction, 0, 320);
   slideSelection(projectDetail, changesWorld ? 16 * direction : 0, changesWorld ? 0 : 12 * direction, 290);
 }
+
+$('console-copy').addEventListener('click', async () => {
+  const command = commandCode.textContent;
+  copyStatus.textContent = '';
+  try {
+    await navigator.clipboard.writeText(command);
+    if (commandCode.textContent === command) copyLabel.textContent = 'Copied';
+  } catch {
+    if (commandCode.textContent !== command) return;
+    copyLabel.textContent = 'Copy';
+    const range = document.createRange();
+    range.selectNodeContents(commandCode);
+    const selection = window.getSelection();
+    selection.removeAllRanges();
+    selection.addRange(range);
+    copyStatus.textContent = 'Command selected. Use your device’s copy shortcut.';
+  }
+});
 
 function jumpToMapProject(index) {
   walk = null;
