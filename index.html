@@ -217,13 +217,12 @@ footer{text-align:center;padding:0 16px 40px;color:var(--on-sea-muted);font-size
 .console-control:hover{background:var(--sea-deep);border-color:var(--foam)}
 .console-content{flex:1;padding:clamp(38px,8vh,86px) 0 40px}
 .console-worlds{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));max-width:720px;border-bottom:1px solid #e6efff55}
-.console-world{position:relative;display:grid;justify-items:start;align-content:start;gap:7px;min-width:0;padding:4px 10px 16px;border:0;background:none;color:var(--on-sea-muted);font:700 1rem/1.15 var(--body);text-align:left;cursor:pointer}
+.console-world{display:grid;justify-items:start;align-content:start;gap:7px;min-width:0;padding:4px 10px 16px;border:0;background:none;color:var(--on-sea-muted);font:700 1rem/1.15 var(--body);text-align:left;cursor:pointer}
 .console-world svg{width:46px;height:46px;color:var(--world-color);opacity:.72;transition:transform .3s var(--ease),opacity .24s var(--ease)}
 .console-world:hover,.console-world[aria-selected=true]{color:var(--paper)}
 .console-world:hover svg{opacity:1}
 .console-world[aria-selected=true]{font-weight:800}
 .console-world[aria-selected=true] svg{opacity:1;transform:translateY(-3px) scale(1.12)}
-.console-world[aria-selected=true]::after{content:"";position:absolute;inset:auto 9px -1px;height:3px;background:var(--world-color);border-radius:2px}
 .console-browser{display:grid;grid-template-columns:minmax(215px,.75fr) minmax(0,1.35fr);gap:clamp(32px,8vw,126px);align-items:start;margin-top:34px}
 .console-list{display:grid;align-content:start;gap:4px;min-width:0}
 .console-project{display:grid;grid-template-columns:24px minmax(0,1fr);align-items:center;gap:14px;min-height:48px;padding:9px 12px;border:0;background:none;color:var(--paper);font:500 1.07rem/1.25 var(--body);text-align:left;overflow-wrap:anywhere;cursor:pointer}
@@ -255,7 +254,6 @@ footer{text-align:center;padding:0 16px 40px;color:var(--on-sea-muted);font-size
   .console-content{padding:26px 0 30px}
   .console-world{padding:4px 5px 12px;gap:4px;font-size:.84rem}
   .console-world svg{width:35px;height:35px}
-  .console-world[aria-selected=true]::after{inset-inline:5px}
   .console-browser{grid-template-columns:minmax(0,1fr);gap:20px;margin-top:14px}
   .console-list{gap:2px}
   .console-project{min-height:44px;font-size:1rem}
