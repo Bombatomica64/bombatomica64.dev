@@ -24,7 +24,7 @@
 <meta name="description" content="Lorenzo Micheli (Bombatomica64): Rust, C and DevOps projects, browsed from a console menu or walked as an island map.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Dela+Gothic+One&family=Figtree:wght@400;500;700;800&family=JetBrains+Mono:wght@500&family=M+PLUS+1p:wght@300;400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Dela+Gothic+One&family=Figtree:wght@400;700;800&family=JetBrains+Mono:wght@500&family=M+PLUS+1p:wght@300;400&display=swap" rel="stylesheet">
 <style>
 :root{
   --sea:#1f44c9; --sea-deep:#11277a; --sea-lite:#3a67ee; --night:#0a1550;
@@ -121,6 +121,7 @@ a{color:inherit;text-underline-offset:.2em;text-decoration-thickness:2px}
 /* ---------- without the script: the three pages as plain reading ---------- */
 .pages{max-width:920px;margin:0 auto;padding:56px 20px 8px;color:#fff;font-family:var(--ui)}
 .pages .xmb-page{margin-bottom:72px}
+.pages-title{margin:0 0 56px;font:400 clamp(1.5rem,4vw,2.2rem)/1.1 var(--display)}
 .foot{padding:0 20px 40px;text-align:center;color:var(--on-sea-muted);font:.9rem var(--ui)}
 
 @media (max-width:720px){
@@ -147,17 +148,18 @@ a{color:inherit;text-underline-offset:.2em;text-decoration-thickness:2px}
 .xmb{
   --ax:clamp(190px,25vw,480px); --ay:clamp(168px,27svh,250px);
   --step:clamp(112px,10.5vw,160px);
-  --box:132px; --row:60px; --cur-y:148px; --below-y:236px; --above-y:-98px;
+  --box:140px; --row:60px; --cur-y:148px; --below-y:236px; --above-y:-98px; --edge:40px;
+  --halo:0 1px 2px #06103c,0 0 14px #0a1550cc; /* keeps text readable where the wave runs behind it */
   --gutter:clamp(20px,3.4vw,48px); --page-shift:calc(var(--ax) - 104px);
-  --h:max(100svh,680px);
+  --h:max(100svh,640px);
   position:relative;isolation:isolate;overflow:hidden;height:var(--h);
   color:#fff;font-family:var(--ui);font-weight:400;text-shadow:0 1px 3px #06103c8c;
   background:
     radial-gradient(70% 60% at 12% -8%,#3a67ee 0%,#3a67ee00 70%),
     linear-gradient(122deg,#2248cf 0%,#1a3bb2 34%,#10257c 70%,#0a1550 100%);
 }
-.xmb :focus-visible{outline-color:#fff}
-.xmb-wave{position:absolute;z-index:-1;inset:0;width:100%;height:100%;pointer-events:none}
+.xmb :focus-visible{outline:2px solid #fff;outline-offset:4px}
+.xmb-wave{position:absolute;z-index:-1;inset:0;width:100%;height:100%;pointer-events:none;opacity:calc(1 - .55 * var(--depth, 0))}
 
 .xmb-top{position:absolute;z-index:2;inset:0 0 auto;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:22px var(--gutter) 0;pointer-events:none}
 .xmb-brand{margin:0;font:400 1rem/1 var(--display);letter-spacing:.01em}
@@ -165,8 +167,9 @@ a{color:inherit;text-underline-offset:.2em;text-decoration-thickness:2px}
 .xmb-clock::before{content:"";width:clamp(48px,14vw,220px);height:1px;background:linear-gradient(90deg,#fff0,#fffc)}
 
 .xmb-cross{position:absolute;inset:0;overflow:hidden;touch-action:pan-y;opacity:calc(1 - .6 * var(--depth, 0));transform:translateX(calc(var(--depth, 0) * var(--page-shift) * -1));
-  -webkit-mask-image:linear-gradient(#0000 44px,#000 104px,#000 calc(100% - 120px),#0000 calc(100% - 56px));
-  mask-image:linear-gradient(#0000 44px,#000 104px,#000 calc(100% - 120px),#0000 calc(100% - 56px))}
+  -webkit-mask-image:linear-gradient(#0000 44px,#000 104px,#000 calc(100% - 140px),#0000 calc(100% - 76px)),linear-gradient(90deg,#0000,#000 var(--edge),#000 calc(100% - var(--edge)),#0000);
+  mask-image:linear-gradient(#0000 44px,#000 104px,#000 calc(100% - 140px),#0000 calc(100% - 76px)),linear-gradient(90deg,#0000,#000 var(--edge),#000 calc(100% - var(--edge)),#0000);
+  -webkit-mask-composite:source-in;mask-composite:intersect}
 .xmb-track{position:absolute;left:var(--ax);top:var(--ay);width:0;height:0;transform:translateX(calc(var(--pos) * var(--step) * -1));animation:xmb-boot .7s ease-out both}
 @keyframes xmb-boot{from{opacity:0}}
 
@@ -176,62 +179,77 @@ a{color:inherit;text-underline-offset:.2em;text-decoration-thickness:2px}
 .xmb-cat:hover,.xmb-cat:focus-visible{--hov:1}
 .xmb-cat svg{width:72px;height:72px;opacity:calc((.62 + .38 * max(var(--f), var(--hov, 0) * .75)) * (1 - var(--depth, 0) * (1 - var(--f))));transform:scale(calc(.68 + .32 * var(--f)));filter:drop-shadow(0 0 9px rgb(255 255 255 / calc(.45 * var(--f)))) drop-shadow(0 2px 4px #06103c80)}
 .xmb-cat-label{position:absolute;top:100%;left:50%;transform:translateX(-50%);white-space:nowrap;text-align:center;font-size:1rem;line-height:1.3;opacity:calc(max(var(--f) * 2 - 1, var(--hov, 0)) * (1 - var(--depth, 0)));pointer-events:none}
-.xmb-cat-label small{display:block;font-size:.82rem;font-weight:300;opacity:calc(var(--f) * 1.6 - .8)}
+.xmb-cat-label small{display:block;font-size:.82rem;opacity:calc(var(--f) * 1.6 - .8)}
+.xmb-count{margin-left:.9em;font-variant-numeric:tabular-nums;opacity:.8}
 
 .xmb-col{position:absolute;left:calc(var(--i) * var(--step));top:0;opacity:var(--show, 0);visibility:hidden}
 .xmb-col.is-live{visibility:visible}
 .xmb-item{--g:0;--wa:0;--wc:0;--wb:1;--wn:0;--dip:1;position:absolute;left:calc(var(--box) / -2);top:0;display:flex;align-items:center;gap:16px;height:var(--row);margin-top:calc(var(--row) / -2);padding-right:16px;color:inherit;text-decoration:none;white-space:nowrap;cursor:pointer;
-  opacity:calc(max(.86 + .14 * var(--g), var(--hov, 0)) * var(--dip));
+  text-shadow:var(--halo);opacity:calc(max(.9 + .1 * var(--g), var(--hov, 0)) * var(--dip));
   transform:translateY(calc(var(--wa) * var(--above-y) + var(--wc) * var(--cur-y) + var(--wb) * var(--below-y) + var(--wn) * var(--row)));transition:--hov .2s}
 .xmb-item:hover{--hov:1}
 .xmb-item:focus{outline:none}
 .xmb-thumb{flex:none;display:grid;place-items:center;width:var(--box)}
-.xmb-tile{position:relative;display:block;width:var(--box);aspect-ratio:16/9;transform:scale(calc(.5 + .5 * var(--g)))}
+.xmb-tile{position:relative;display:block;width:var(--box);aspect-ratio:2.2;transform:scale(calc(.5 + .5 * var(--g)))}
 .xmb-tile > *{display:block;width:100%;height:100%}
-.xmb-tile img{object-fit:cover;background:var(--ink);box-shadow:0 0 0 1.5px #ffffff59,0 6px 16px #06103c8c}
+.xmb-tile img{object-fit:cover;background:var(--ink);box-shadow:0 0 0 1.5px #ffffff59,0 6px 16px #06103c8c;transition:box-shadow .2s}
+.xmb-item:hover .xmb-tile img{box-shadow:0 0 0 1.5px #ffffffd9,0 6px 18px #06103c99}
+.xmb-item:hover .xmb-tile svg{filter:drop-shadow(0 0 7px #ffffffb3)}
 .xmb-tile svg{filter:drop-shadow(0 2px 4px #06103c80)}
 .xmb-tile::before{content:"";position:absolute;z-index:-1;inset:-16px -18px;border-radius:50%;background:radial-gradient(closest-side,#ffffff8c,#fff0);opacity:calc(var(--g) * .5)}
 .is-active .is-current .xmb-tile::before{animation:xmb-pulse 2.8s ease-in-out infinite}
 @keyframes xmb-pulse{50%{opacity:.95}}
 .xmb.is-paused .xmb-tile::before{animation-play-state:paused}
-.xmb-item:focus-visible .xmb-tile{outline:2px solid #fff;outline-offset:5px}
-.xmb-text{position:relative;display:block;opacity:calc(1 - var(--depth, 0) * 1.5)}
-.xmb-name{display:block;font-size:clamp(1.4rem,1.1rem + .75vw,1.8rem);font-weight:400;line-height:1.2;transform-origin:0 50%;transform:translateY(calc(var(--g) * -.4em)) scale(calc(.62 + .38 * var(--g)))}
-.is-near .xmb-name{font-weight:300}
+.xmb-item:focus-visible .xmb-tile{outline:2px solid #fff;outline-offset:4px;border-radius:4px}
+/* a line-art glyph gets a ring its own size, not the size of a screenshot */
+.xmb-item:focus-visible .xmb-tile.is-glyph{outline:0}
+.xmb-tile.is-glyph::after{content:"";position:absolute;left:50%;top:50%;width:calc(var(--box) * .5);aspect-ratio:1;translate:-50% -50%;border-radius:14px}
+.xmb-item:focus-visible .xmb-tile.is-glyph::after{outline:2px solid #fff}
+.xmb-text{position:relative;display:block;opacity:clamp(0, 1 - var(--depth, 0) * 2.5, 1);transition:translate .25s var(--ease)}
+.xmb-item:not(.is-current):hover .xmb-text{translate:4px 0}
+.xmb-item.is-current:hover .xmb-name{text-decoration:underline 1px;text-underline-offset:.2em}
+.xmb-name{display:block;font-size:clamp(1.4rem,1.1rem + .75vw,1.8rem);font-weight:400;line-height:1.2;transform-origin:0 50%;transform:translateY(calc(var(--g) * -.4em)) scale(calc(.62 + (var(--fit, 1) - .62) * var(--g)))}
 .xmb-sub{position:absolute;left:0;top:calc(100% - .42em);display:flex;align-items:center;gap:.9em;font-size:.94rem;font-weight:400;opacity:calc(var(--g) * 2.4 - 1.48)}
 .xmb-sub span{display:inline-flex;align-items:center;gap:.35em}
 .xmb-sub svg{width:1.05em;height:1.05em}
 
-.xmb-detail{opacity:calc(1 - var(--depth, 0) * 2);transform:translateX(calc(var(--depth, 0) * -80px));position:absolute;z-index:1;left:calc(var(--ax) + clamp(330px,31vw,470px));right:var(--gutter);top:calc(var(--ay) + 76px);max-width:720px}
-.xmb-art{position:relative;aspect-ratio:2.2;width:min(100%,(var(--h) - var(--ay) - 340px) * 2.2);min-width:260px;background:var(--ink);box-shadow:0 0 0 1px #ffffff40,0 20px 56px #050d3aa6}
-.xmb-art img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .4s}
+.xmb-detail{opacity:calc(clamp(0, 1 - var(--depth, 0) * 2.5, 1) * (1 - var(--away, 0) * .65));transform:translateX(calc(var(--depth, 0) * -80px));position:absolute;z-index:1;left:calc(var(--ax) + clamp(330px,31vw,470px));right:var(--gutter);top:calc(var(--ay) + 76px);max-width:720px}
+.xmb-art{position:relative;aspect-ratio:2.2;width:min(100%,(var(--h) - var(--ay) - 340px) * 2.2);min-width:200px;background:var(--ink);box-shadow:0 0 0 1px #ffffff40,0 20px 56px #050d3aa6}
+.xmb-art img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .26s}
 .xmb-art.is-cut img{transition:none}
 .xmb-art img.is-on{opacity:1}
 .xmb-detail.no-art .xmb-art{display:none}
-.xmb-desc{max-width:44ch;margin:20px 0 0;font-size:1.12rem;line-height:1.6;text-shadow:0 1px 2px #06103c,0 0 14px #0a1550cc}
-.xmb-detail.no-art .xmb-desc{margin-top:64px;font-size:1.3rem;font-weight:300;line-height:1.5}
-.xmb-command{display:flex;flex-wrap:wrap;align-items:center;gap:8px 10px;margin:14px 0 0}
-.xmb-command code{padding:7px 11px;border-radius:4px;background:#06103c99;font:500 .82rem/1.5 var(--mono);text-shadow:none;overflow-wrap:anywhere}
-.xmb-copy-status{flex-basis:100%;font-size:.88rem}
+.xmb-desc{max-width:44ch;margin:20px 0 0;font-size:1.12rem;line-height:1.6;text-shadow:var(--halo)}
+.xmb-detail.no-art .xmb-desc{margin-top:40px}
+.xmb-command{margin:14px 0 0}
+.xmb-command-row{display:flex;align-items:center;gap:10px}
+.xmb-command code{display:flex;align-items:center;min-width:0;min-height:44px;padding:7px 11px;border-radius:4px;background:#06103c99;font:500 .82rem/1.5 var(--mono);text-shadow:none;overflow-wrap:anywhere}
+.xmb-copy-status{display:block;margin-top:8px;font-size:.88rem}
 .xmb-copy-status:empty{display:none}
-.xmb-btn{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:0 20px;border:1px solid #ffffff8c;border-radius:999px;background:#ffffff1a;color:#fff;font:400 1rem/1.2 var(--ui);text-decoration:none;text-shadow:inherit;cursor:pointer;transition:background-color .2s,color .2s}
+.xmb-btn{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:0 20px;border:1px solid #ffffff8c;border-radius:999px;background:#0a155073;color:#fff;font:400 1rem/1.2 var(--ui);text-decoration:none;text-shadow:inherit;cursor:pointer;transition:background-color .2s,color .2s}
 .xmb-btn:hover{background:#fff;color:var(--sea-deep);text-shadow:none}
-.xmb-copy{min-height:36px;min-width:5.2rem;padding:0 14px;font-size:.9rem}
-.xmb-open{margin-top:20px}
+.xmb-copy{flex:none;gap:6px;min-width:5.6rem;padding:0 14px;font-size:.9rem}
+.xmb-copy svg{display:none;width:14px;height:14px}
+.xmb-copy.is-copied{border-color:#fff;background:#ffffff38}
+.xmb-copy.is-copied svg{display:block}
+.xmb-open{margin-top:20px;border:1.5px solid #fff}
 
 /* pages: opening one slides the menu aside into a rail of icons and brings the page in beside it */
-.xmb-pages{position:absolute;z-index:1;inset:96px var(--gutter) 76px clamp(236px,19vw,330px);overflow-y:auto;visibility:hidden;opacity:var(--depth, 0);transform:translateX(calc((1 - var(--depth, 0)) * 72px));scrollbar-color:#ffffff66 transparent}
+.xmb-pages{position:absolute;z-index:1;inset:84px var(--gutter) 76px clamp(236px,19vw,330px);padding:12px 0 24px;overflow-y:auto;visibility:hidden;text-shadow:var(--halo);
+  /* the page only starts to appear once the menu's text has gone, so the two never overprint */
+  opacity:clamp(0, (var(--depth, 0) - .45) / .55, 1);transform:translateX(calc((1 - var(--depth, 0)) * 72px));scrollbar-color:#ffffff66 transparent;
+  -webkit-mask-image:linear-gradient(#0000,#000 14px,#000 calc(100% - 26px),#0000);mask-image:linear-gradient(#0000,#000 14px,#000 calc(100% - 26px),#0000)}
 .xmb.page-live .xmb-pages{visibility:visible}
 .xmb.has-page .xmb-detail{pointer-events:none}
-.xmb-back{min-height:36px;margin-bottom:22px;padding:0 16px 0 12px;gap:6px;font-size:.9rem}
+.xmb-back{margin-bottom:22px;padding:0 16px 0 12px;gap:6px;font-size:.9rem}
 .xmb-back svg{width:14px;height:14px}
 .xmb-page{max-width:900px}
 .xmb-page h2{margin:0 0 24px;padding-bottom:16px;border-bottom:1px solid #ffffff59;font-size:clamp(1.9rem,1.45rem + 1.3vw,2.7rem);font-weight:300;line-height:1.15;letter-spacing:.005em}
-.xmb-page h2:focus{outline:none}
+.xmb-page:focus{outline:none}
 .xmb-lede{max-width:62ch;margin:0 0 30px;font-size:1.12rem;line-height:1.7}
 .xmb-facts{display:grid;grid-template-columns:auto 1fr;gap:.55rem 2rem;max-width:640px;margin:0}
 .xmb-facts div{display:contents}
-.xmb-facts dt{font-weight:300;opacity:.82}
+.xmb-facts dt{opacity:.9}
 .xmb-facts dd{margin:0}
 .xmb-gear{list-style:none;margin:0;padding:0}
 .xmb-gear li{display:grid;grid-template-columns:minmax(0,15rem) 1fr;gap:.2rem 2rem;align-items:baseline;padding:.85rem 0;border-bottom:1px solid #ffffff2e}
@@ -245,36 +263,39 @@ a{color:inherit;text-underline-offset:.2em;text-decoration-thickness:2px}
 .warp{color:#fff;font-weight:400;white-space:nowrap;text-decoration:underline dotted #ffffffb8 1px;text-underline-offset:.3em}
 .warp:hover{text-decoration-style:solid}
 
-.xmb-legend{position:absolute;z-index:2;inset:auto auto 16px var(--gutter);display:flex;align-items:center;gap:8px 28px;font-size:.9rem;font-weight:300}
+.xmb-legend{position:absolute;z-index:2;inset:auto auto 16px var(--gutter);display:flex;align-items:center;gap:8px 28px;font-size:.9rem}
 .xmb-keys{display:flex;flex-wrap:wrap;gap:4px 22px;margin:0}
 .xmb-keys span{display:inline-flex;align-items:center;gap:5px}
 .xmb-keys-page,.xmb.has-page .xmb-keys-menu{display:none}
 .xmb.has-page .xmb-keys-page{display:flex}
 .xmb-legend kbd{min-width:1.7em;padding:1px 6px;border:1px solid #ffffff80;border-radius:4px;font:400 .8rem/1.5 var(--ui);text-align:center}
-.xmb-toggle{min-height:44px;padding:0;border:0;background:none;color:inherit;font:inherit;text-shadow:inherit;text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:.3em;cursor:pointer}
+.xmb-toggle{min-height:44px;margin:0 -6px;padding:0 6px;border:0;border-radius:6px;background:none;color:inherit;font:inherit;text-shadow:inherit;white-space:nowrap;opacity:.86;text-decoration:underline #ffffff8c 1px;text-underline-offset:.3em;cursor:pointer;transition:opacity .2s,text-decoration-color .2s}
+.xmb-toggle:hover{opacity:1;text-decoration-color:#fff}
 
 @media (max-width:899px){
-  .xmb{--ax:92px;--ay:150px;--step:100px;--box:104px;--row:54px;--cur-y:124px;--below-y:198px;--above-y:-82px;height:auto;min-height:100svh;display:flex;flex-direction:column}
+  .xmb{--ax:108px;--ay:150px;--step:84px;--box:92px;--row:54px;--cur-y:114px;--below-y:176px;--above-y:-80px;--edge:12px;height:auto;min-height:100svh;display:flex;flex-direction:column}
   .xmb-top{padding-top:16px}
   .xmb-brand{font-size:.9rem}
   .xmb-clock{font-size:.95rem}
   .xmb-cross{position:relative;inset:auto;flex:none;height:calc(var(--ay) + var(--below-y) + var(--row) * 1.35);
-    -webkit-mask-image:linear-gradient(#0000 38px,#000 84px,#000 calc(100% - 84px),#0000 calc(100% - 8px));
-    mask-image:linear-gradient(#0000 38px,#000 84px,#000 calc(100% - 84px),#0000 calc(100% - 8px))}
-  .xmb-cat svg{width:60px;height:60px}
+    -webkit-mask-image:linear-gradient(#0000 38px,#000 84px,#000 calc(100% - 84px),#0000 calc(100% - 8px)),linear-gradient(90deg,#0000,#000 var(--edge),#000 calc(100% - var(--edge)),#0000);
+    mask-image:linear-gradient(#0000 38px,#000 84px,#000 calc(100% - 84px),#0000 calc(100% - 8px)),linear-gradient(90deg,#0000,#000 var(--edge),#000 calc(100% - var(--edge)),#0000)}
+  .xmb-cat svg{width:54px;height:54px}
   .xmb-cat-label{font-size:.95rem}
   .xmb-name{font-size:1.42rem}
-  .xmb-sub{font-size:.88rem}
+  .xmb-sub{font-size:.84rem;gap:.6em}
   .xmb-detail{position:relative;inset:auto;max-width:none;padding:4px 20px 0}
-  .xmb-art{width:100%;min-width:0}
+  .xmb-art{width:100%;max-width:560px;min-width:0}
   .xmb-desc,.xmb-detail.no-art .xmb-desc{max-width:60ch;margin-top:16px;font-size:1.05rem;font-weight:400;line-height:1.55}
   .xmb-open{margin-top:16px}
   .xmb-legend{position:relative;inset:auto;justify-content:flex-end;margin-top:auto;padding:14px 20px 12px}
   .xmb-cross{opacity:1;transform:none}
-  .xmb-detail{opacity:1;transform:none}
+  .xmb-detail{opacity:calc(1 - var(--away, 0) * .65);transform:none;animation:xmb-boot .5s ease-out both}
   .xmb.has-page .xmb-cross,.xmb.has-page .xmb-detail{display:none}
-  .xmb-pages{position:relative;inset:auto;display:none;overflow:visible;visibility:visible;opacity:1;transform:none;padding:78px 20px 8px}
+  .xmb-pages{position:relative;inset:auto;display:none;overflow:visible;visibility:visible;opacity:1;transform:none;padding:78px 20px 8px;-webkit-mask-image:none;mask-image:none}
   .xmb.has-page .xmb-pages{display:block;animation:xmb-page-in .4s var(--ease)}
+  .xmb.page-leaving .xmb-pages{animation:xmb-page-out .18s ease-in forwards}
+  .xmb-gear span,.xmb-saves li{line-height:1.85}
   .xmb-gear li{grid-template-columns:1fr}
   .xmb-saves{grid-template-columns:1fr;gap:0;margin:22px 0 0 5px}
   .xmb-saves li{padding:0 0 26px 26px;border-top:0;border-left:1px solid #ffffff73}
@@ -282,7 +303,15 @@ a{color:inherit;text-underline-offset:.2em;text-decoration-thickness:2px}
   .xmb-saves li::before{left:-6px;top:10px}
 }
 @keyframes xmb-page-in{from{opacity:0;transform:translateX(36px)}}
-@media (pointer:coarse){.xmb .xmb-keys,.xmb.has-page .xmb-keys-page{display:none}}
+@keyframes xmb-page-out{to{opacity:0;transform:translateX(28px)}}
+@media (max-width:899px) and (max-height:700px){
+  .xmb{--ay:124px;--cur-y:108px;--below-y:168px;--above-y:-78px}
+  .xmb-cross{height:calc(var(--ay) + var(--below-y) + var(--row) * .75)}
+  #xmb-body{display:flex;flex-direction:column}
+  .xmb-art{order:1;margin-top:20px}
+  .xmb-desc,.xmb-detail.no-art .xmb-desc{margin-top:6px}
+}
+@media (pointer:coarse),(max-width:999px){.xmb .xmb-keys,.xmb.has-page .xmb-keys-page{display:none}}
 </style>
 </head>
 <body id="top">
@@ -308,8 +337,10 @@ a{color:inherit;text-underline-offset:.2em;text-decoration-thickness:2px}
         <p class="xmb-desc" id="xmb-desc"></p>
       </div>
       <div class="xmb-command" id="xmb-command" hidden>
-        <code id="xmb-code"></code>
-        <button class="xmb-btn xmb-copy" id="xmb-copy" type="button"><span aria-live="polite">Copy</span></button>
+        <div class="xmb-command-row">
+          <code id="xmb-code"></code>
+          <button class="xmb-btn xmb-copy" id="xmb-copy" type="button"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8.500 6.500 12 13 4.500" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg><span aria-live="polite">Copy</span></button>
+        </div>
         <span class="xmb-copy-status" id="xmb-copy-status" role="status"></span>
       </div>
       <a class="xmb-btn xmb-open" id="xmb-open"></a>
@@ -319,9 +350,9 @@ a{color:inherit;text-underline-offset:.2em;text-decoration-thickness:2px}
   <div class="xmb-pages" id="xmb-pages" inert>
     <button class="xmb-btn xmb-back" id="xmb-back" type="button"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M10 3 5 8l5 5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>Back</button>
   </div>
-  <footer class="xmb-legend">
+  <footer class="xmb-legend" id="xmb-legend">
     <p class="xmb-keys xmb-keys-menu"><span><kbd>←</kbd><kbd>→</kbd> Sections</span><span><kbd>↑</kbd><kbd>↓</kbd> Items</span><span><kbd>Enter</kbd> Open</span></p>
-    <p class="xmb-keys xmb-keys-page"><span><kbd>Esc</kbd> Back</span></p>
+    <p class="xmb-keys xmb-keys-page"><span><kbd>Esc</kbd><kbd>←</kbd> Back</span></p>
     <button class="xmb-toggle" id="xmb-motion" type="button">Pause motion</button>
     <button class="xmb-toggle" id="xmb-sound" type="button">Turn sound on</button>
   </footer>
@@ -377,8 +408,9 @@ a{color:inherit;text-underline-offset:.2em;text-decoration-thickness:2px}
 </div>
 
 <div class="pages" id="pages">
-  <section class="xmb-page" id="profile" aria-labelledby="profileH">
-    <h2 id="profileH" tabindex="-1">Player file</h2>
+  <noscript><h1 class="pages-title">Bombatomica64 — Lorenzo Micheli</h1></noscript>
+  <section class="xmb-page" id="profile" aria-labelledby="profileH" tabindex="-1">
+    <h2 id="profileH">Player file</h2>
     <p class="xmb-lede">I'm Lorenzo, online as Bombatomica64. I learned to program the hard way at 42, writing shells, raycasters and IRC servers in C and C++. These days I write Rust on the side, work at Instal on Price Ninja, where I run Docker, Kubernetes and CI/CD alongside Django and Angular, and build small tools that make AI agents and my own desktop behave.</p>
     <dl class="xmb-facts">
       <div><dt>Class</dt><dd>Developer and DevOps tinkerer</dd></div>
@@ -389,8 +421,8 @@ a{color:inherit;text-underline-offset:.2em;text-decoration-thickness:2px}
     </dl>
   </section>
 
-  <section class="xmb-page" id="inventory" aria-labelledby="invH">
-    <h2 id="invH" tabindex="-1">Inventory</h2>
+  <section class="xmb-page" id="inventory" aria-labelledby="invH" tabindex="-1">
+    <h2 id="invH">Inventory</h2>
     <p class="xmb-lede">Gear picked up along the way, and where it gets used. Underlined names jump to that project.</p>
     <ul class="xmb-gear">
       <li><b>Rust</b><span><a class="warp" href="#smelt">smelt</a>, <a class="warp" href="#cargo-gpui">cargo-gpui</a>, <a class="warp" href="#gpui-mobile-lab">GPUI on Android</a>, <a class="warp" href="#gpui-pre">gpui-pre</a>, <a class="warp" href="#spotifast-karaoke">Spotifast Karaoke</a>, <a class="warp" href="#matrix">matrix</a></span></li>
@@ -402,8 +434,8 @@ a{color:inherit;text-underline-offset:.2em;text-decoration-thickness:2px}
     </ul>
   </section>
 
-  <section class="xmb-page" id="saves" aria-labelledby="saveH">
-    <h2 id="saveH" tabindex="-1">Save points</h2>
+  <section class="xmb-page" id="saves" aria-labelledby="saveH" tabindex="-1">
+    <h2 id="saveH">Save points</h2>
     <p class="xmb-lede">The run so far, by year of last activity on GitHub.</p>
     <ol class="xmb-saves">
       <li><span class="xmb-year">2023</span>First steps at 42: <a class="warp" href="#so_long">so_long</a>, <a class="warp" href="#pipex">pipex</a>, <a class="warp" href="#push_swap">push_swap</a>.</li>
@@ -670,7 +702,8 @@ function frame(now) {
 
   const r = svg.getBoundingClientRect(), asp = r.height / Math.max(1, r.width);
   let tw, tx, ty;
-  if (mapMode || !started) { tw = Math.max(W, H / asp) * 1.04; tx = W / 2 + (started || reduce ? 0 : Math.sin(now / 4000) * 40); ty = H / 2; }
+  if (mapMode || !started) { tw = Math.max(W, H / asp) * 1.04; tx = W / 2 + (started || reduce ? 0 : Math.sin(now / 4000) * 40);
+    ty = H / 2 + (started ? Math.max(0, Math.min(120, (tw * asp - H) / 2 - 30)) : 0); }
   else { tw = r.width < 720 ? 516 : 914; tx = pos.x - (r.width < 720 ? 0 : tw * .14); ty = pos.y + (r.width < 720 ? tw * asp * .12 : 0); }
   const th = tw * asp, k = reduce ? 1 : Math.min(1, dt * 4);
   cam.w += (tw - cam.w) * k; cam.h = cam.w * asp; cam.x += (tx - cam.x) * k; cam.y += (ty - cam.y) * k;
@@ -699,7 +732,7 @@ const motionOK = matchMedia('(prefers-reduced-motion: no-preference)');
 
 const FOAM = [230, 239, 255];
 const line = (d, box = '0 0 24 24') => `<svg viewBox="${box}" aria-hidden="true"><path d="${d}" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
-const glyph = d => line(d, '-9.33 0 42.67 24');
+const glyph = d => line(d, '-14.4 0 52.8 24');
 const solid = body => `<svg viewBox="0 0 48 48" aria-hidden="true" fill="currentColor" stroke-linecap="round" stroke-linejoin="round">${body}</svg>`;
 const worldSkin = [
   { sub: 'C at 42 school', tint: [127, 220, 114], icon: solid('<path d="M5 37c3.500-6.500 10.500-10 19-10s15.500 3.500 19 10z"/><path d="M24.500 28c.8-6-.2-11.500-2.500-16" fill="none" stroke="currentColor" stroke-width="2.6"/><path d="M22 12c-4.500-3.600-9.600-3-12 .6 4-.8 8 .2 12-.6zm0 0c1-5 5-7.600 9.600-6.600-3.600 1.500-6 4-9.600 6.600zm0 0c4.600-1.500 9.200-.2 11.200 3.600-3.600-1.800-7.200-2-11.200-3.600zm0 0c-2.600 2-3.600 5.600-2.600 9.200.5-3.600 1.500-6.200 2.600-9.200z" stroke="currentColor" stroke-width="1.2"/><path d="M4 42.500h40" fill="none" stroke="currentColor" stroke-width="2.4"/>') },
@@ -749,6 +782,7 @@ const put = (element, name, value) => element.style.setProperty(name, value.toFi
 function layout() {
   put(track, '--pos', nav.x);
   put(consoleView, '--depth', depth.x);
+  put(consoleView, '--away', Math.min(1, Math.abs(nav.x - shownCat)));
   consoleView.classList.toggle('page-live', !!page || depth.x > .004);
   /* sections flying past on a long jump stay dark; the one you slow down on lights up */
   const calm = Math.max(0, Math.min(1, 2 - Math.abs(nav.v) / 9));
@@ -769,7 +803,6 @@ function layout() {
       put(item, '--wn', o <= -1 ? o + 1 : o >= 1 ? o - 1 : 0);
       /* an item crossing the section row ducks out of sight instead of sliding over the icon */
       put(item, '--dip', o > -1 && o < 0 ? 1 - .9 * Math.sin(Math.PI * -o) : 1);
-      item.classList.toggle('is-near', g > .5);
     });
   });
 }
@@ -814,6 +847,7 @@ function arrive() {
 }
 
 function mark(c) {
+  cats[c].count.textContent = `${pick[c] + 1} / ${cats[c].items.length}`;
   cats[c].els.forEach((item, j) => {
     const current = j === pick[c];
     item.classList.toggle('is-current', current);
@@ -830,7 +864,8 @@ cats.forEach((c, i) => {
   c.tab.setAttribute('role', 'tab');
   c.tab.setAttribute('aria-controls', `xmb-col-${i}`);
   c.tab.style.setProperty('--i', i);
-  c.tab.innerHTML = `${c.icon}<span class="xmb-cat-label">${c.name}<small>${c.sub}</small></span>`;
+  c.tab.innerHTML = `${c.icon}<span class="xmb-cat-label">${c.name}<small>${c.sub}<span class="xmb-count"></span></small></span>`;
+  c.count = c.tab.querySelector('.xmb-count');
   c.tab.addEventListener('click', () => select(i));
   $('xmb-cats').append(c.tab);
 
@@ -848,7 +883,7 @@ cats.forEach((c, i) => {
     const thumb = item.art ? `<img src="${item.art}" alt="" width="1100" height="500" decoding="async">` : item.glyph;
     const sub = !item.lang ? item.sub
       : `${item.lang}<span>${item.st === 'done' ? `${line(trophy)}${completedStatus}` : 'In progress'}</span>`;
-    a.innerHTML = `<span class="xmb-thumb"><span class="xmb-tile">${thumb}</span></span><span class="xmb-text"><span class="xmb-name"></span><span class="xmb-sub">${sub}</span></span>`;
+    a.innerHTML = `<span class="xmb-thumb"><span class="xmb-tile${item.art ? '' : ' is-glyph'}">${thumb}</span></span><span class="xmb-text"><span class="xmb-name"></span><span class="xmb-sub">${sub}</span></span>`;
     a.querySelector('.xmb-name').textContent = item.t;
     a.addEventListener('click', event => {
       if (i !== cat || j !== pick[i]) { event.preventDefault(); select(i, j, true); }
@@ -870,7 +905,7 @@ const detailBody = $('xmb-body');
 const detailInfo = $('xmb-info');
 const artBox = $('xmb-art');
 const artImages = [...artBox.querySelectorAll('img')];
-let artOn = 0, artJob = 0, detailTimer = 0, bodyOut = false, infoOut = false, enterX = 0, enterY = 0;
+let artOn = 0, artJob = 0, detailTimer = 0, bodyOut = false, infoOut = false, enterX = 0, enterY = 0, shownCat = 1;
 
 function showArt(item, fade) {
   const job = ++artJob;
@@ -894,17 +929,40 @@ function fill(item, fade) {
   $('xmb-desc').textContent = item.d;
   commandRow.hidden = !item.code;
   commandCode.textContent = item.code || '';
-  copyLabel.textContent = 'Copy';
+  restCopy();
   copyStatus.textContent = '';
   openLink.textContent = item.go;
   openLink.href = item.href;
   if (item.ext) { openLink.target = '_blank'; openLink.rel = 'noopener'; }
   else { openLink.removeAttribute('target'); openLink.removeAttribute('rel'); }
   showArt(item, fade);
+  shownCat = cat;
+  fitDetail();
+}
+
+/* on short or narrow screens the preview gives up height so the action never runs into the bottom bar */
+function fitDetail() {
+  artBox.style.width = '';
+  if (getComputedStyle(detailView).position !== 'absolute' || detailView.classList.contains('no-art')) return;
+  /* stay 16px above the bottom bar where it reaches under the detail, otherwise 20px above the edge */
+  const bar = $('xmb-legend').getBoundingClientRect(), box = detailBody.getBoundingClientRect();
+  const over = box.bottom - (bar.right > box.left ? bar.top - 16 : consoleView.getBoundingClientRect().bottom - 20);
+  if (over > 0) artBox.style.width = `${Math.max(110, artBox.offsetHeight - over) * 2.2}px`;
+}
+
+/* a long name shrinks a little when selected instead of running under the preview or off a phone */
+function fitNames() {
+  const sideBySide = getComputedStyle(detailView).position === 'absolute';
+  const left = track.offsetLeft + cats[0].els[0].querySelector('.xmb-thumb').offsetWidth / 2 + 16;
+  const room = (sideBySide ? detailView.offsetLeft - 36 : consoleView.clientWidth - 16) - left;
+  cats.forEach(c => c.els.forEach(item => {
+    const width = item.querySelector('.xmb-name').offsetWidth;
+    if (width) put(item, '--fit', Math.max(.62, Math.min(1, room / width)));
+  }));
 }
 
 function leave(element, x, y) {
-  element.style.transition = 'opacity .13s ease-in, transform .18s ease-in';
+  element.style.transition = 'opacity .11s ease-in, transform .16s ease-in';
   element.style.opacity = 0;
   element.style.transform = `translate(${x}px, ${y}px)`;
 }
@@ -927,6 +985,7 @@ function hideDetail(dx) {
 
 function showDetail(item, dx, dy, instant) {
   clearTimeout(detailTimer);
+  if (item.art) new Image().src = item.art; /* decoded by the time the words change, so picture and text swap together */
   if (instant || !motionOK.matches) {
     bodyOut = infoOut = false;
     detailBody.removeAttribute('style');
@@ -941,10 +1000,10 @@ function showDetail(item, dx, dy, instant) {
     if (bodyOut) enter(detailBody, enterX * 40, 0);
     if (infoOut) enter(detailInfo, 0, enterY * 12);
     bodyOut = infoOut = false;
-  }, bodyOut ? 170 : 110);
+  }, bodyOut ? 120 : 90);
 }
 
-function select(c, j, focus = false, settle = false) {
+function select(c, j, focus = false) {
   c = Math.max(0, Math.min(cats.length - 1, c));
   if (j === undefined) j = pick[c];
   j = Math.max(0, Math.min(cats[c].items.length - 1, j));
@@ -964,8 +1023,8 @@ function select(c, j, focus = false, settle = false) {
     showDetail(cats[c].items[j], dx, dy, first);
     tintTo = cats[c].tint;
     if (!waveFrameId) { tint = [...tintTo]; drawWave(); }
-    if (!first) { blip(dx ? 'side' : 'move'); setHash(cats[c].items[j].id); }
-  } else if (settle) showDetail(cats[c].items[j], 0, 0);
+    if (!first) { blip(dx ? 'side' : 'move'); setHash(address(cats[c].items[j])); }
+  }
   if (first) arrive(); else move();
   if (focus) cats[c].els[j].focus({ preventScroll: true });
 }
@@ -974,13 +1033,17 @@ function select(c, j, focus = false, settle = false) {
 const pages = {};
 document.querySelectorAll('#pages .xmb-page').forEach(section => {
   pages[section.id] = section;
+  section.id = `page-${section.id}`; /* the address now belongs to the console, not to the browser's own jump-to-anchor */
   section.hidden = true;
   pagesBox.append(section);
 });
 $('pages').remove();
 document.querySelector('.foot').hidden = true;
 
-function openPage(id) {
+let leaveTimer = 0;
+function openPage(id, push = true) {
+  clearTimeout(leaveTimer);
+  consoleView.classList.remove('page-leaving');
   page = id;
   for (const key in pages) pages[key].hidden = key !== id;
   consoleView.classList.add('has-page', 'page-live');
@@ -989,46 +1052,57 @@ function openPage(id) {
   $('xmb-cross').inert = detailView.inert = true;
   move();
   blip('open');
-  setHash(id);
+  /* opening from the menu adds a history entry, so the browser's Back closes the page */
+  if (push) { try { history.pushState({ page: id }, '', `#${id}`); } catch { /* file: pages in some browsers */ } }
   if (consoleView.getBoundingClientRect().top < 0) consoleView.scrollIntoView();
-  pages[id].querySelector('h2').focus({ preventScroll: true });
+  pages[id].focus({ preventScroll: true });
 }
 
-function closePage(focus = true) {
+function closePage(focus = true, back = false) {
   if (!page) return;
   page = null;
-  consoleView.classList.remove('has-page');
+  clearTimeout(leaveTimer);
+  if (motionOK.matches && getComputedStyle(pagesBox).position !== 'absolute') {
+    consoleView.classList.add('page-leaving');
+    leaveTimer = setTimeout(() => consoleView.classList.remove('has-page', 'page-leaving'), 180);
+  } else consoleView.classList.remove('has-page');
   pagesBox.inert = true;
   $('xmb-cross').inert = detailView.inert = false;
   move();
   blip('back');
-  setHash(cats[cat].items[pick[cat]].id);
+  if (back && history.state && history.state.page) history.back();
+  else setHash(address(cats[cat].items[pick[cat]]));
   if (focus) cats[cat].els[pick[cat]].focus({ preventScroll: true });
 }
 
-$('xmb-back').addEventListener('click', () => closePage());
+$('xmb-back').addEventListener('click', () => closePage(true, true));
 /* the menu is inert while a page is open, so a click on it lands here */
 consoleView.addEventListener('click', event => {
-  if (page && event.target === consoleView) closePage();
+  if (page && event.target === consoleView) closePage(true, true);
 });
 
-/* every item has an address: /#smelt selects it, /#inventory opens that page, /#map the map */
+/* Every item has an address: /#smelt selects it, /#inventory opens that page, /#map the map.
+   A page item that is only selected is /#menu-inventory, so closing a page changes the address. */
+const address = item => pages[item.id] ? `menu-${item.id}` : item.id;
 function setHash(id) {
   try { history.replaceState(null, '', `#${id}`); } catch { /* file: pages in some browsers */ }
 }
 
 function applyHash() {
-  const want = decodeURIComponent(location.hash.slice(1)).toLowerCase();
-  if (!want) return;
+  const hash = decodeURIComponent(location.hash.slice(1)).toLowerCase();
+  const want = hash.replace(/^menu-/, '');
+  if (!want) { closePage(false); return; }
   cats.forEach((c, i) => c.items.forEach((item, j) => {
     if (item.id !== want) return;
     if (consoleView.hidden) openConsole(false);
     select(i, j);
-    if (pages[want]) openPage(want);
+    if (pages[want] && hash === want) { if (page !== want) openPage(want, false); setHash(want); }
     else { closePage(false); if (want === 'map') openMap(); }
   }));
 }
-addEventListener('hashchange', applyHash);
+addEventListener('popstate', applyHash);
+/* a page opened straight from its address: undo the browser's own jump to the anchor */
+addEventListener('load', () => { if (page) { scrollTo(0, 0); pages[page].focus({ preventScroll: true }); } });
 
 /* sounds are synthesised, short, and off until asked for */
 let audio = null, soundOn = false;
@@ -1065,21 +1139,34 @@ openLink.addEventListener('click', event => {
   if (item.run) { event.preventDefault(); item.run(); }
 });
 
+let copyTimer = 0;
+function restCopy() {
+  clearTimeout(copyTimer);
+  copyLabel.textContent = 'Copy';
+  $('xmb-copy').classList.remove('is-copied');
+}
+
 $('xmb-copy').addEventListener('click', async () => {
+  restCopy();
   const command = commandCode.textContent;
   copyStatus.textContent = '';
   try {
     await navigator.clipboard.writeText(command);
-    if (commandCode.textContent === command) copyLabel.textContent = 'Copied';
+    if (commandCode.textContent === command) {
+      copyLabel.textContent = 'Copied';
+      $('xmb-copy').classList.add('is-copied');
+      copyTimer = setTimeout(restCopy, 2000);
+    }
   } catch {
     if (commandCode.textContent !== command) return;
-    copyLabel.textContent = 'Copy';
+    restCopy();
     const range = document.createRange();
     range.selectNodeContents(commandCode);
     const selection = window.getSelection();
     selection.removeAllRanges();
     selection.addRange(range);
     copyStatus.textContent = 'Command selected. Use your device’s copy shortcut.';
+    fitDetail();
   }
 });
 
@@ -1094,7 +1181,7 @@ function drawWave() {
   if (!waveW) return;
   const ctx = waveCtx, t = waveT;
   ctx.clearRect(0, 0, waveW, waveH);
-  ctx.globalCompositeOperation = 'lighter';
+  ctx.globalCompositeOperation = 'screen';
   const [r, g, b] = tint.map(v => Math.round(v * .55 + 115));
   const seg = Math.max(8, waveW / 130), span = Math.max(waveW, 900), amp = Math.min(waveH * .15, 150);
   const dim = waveW < 900 ? .6 : 1; /* on phones the ribbon runs behind body text */
@@ -1124,7 +1211,7 @@ function drawWave() {
       const q = i / (lines - 1) - .5, edge = Math.abs(q) * 2, points = i ? i === lines - 1 ? bottom : curve(q) : top;
       ctx.beginPath();
       for (let k = 0; k < points.length; k += 2) ctx.lineTo(points[k], points[k + 1]);
-      ctx.strokeStyle = `rgba(${r},${g},${b},${((.035 + .2 * edge ** 3) * glow * dim).toFixed(3)})`;
+      ctx.strokeStyle = `rgba(${r},${g},${b},${((.035 + .15 * edge ** 3) * glow * dim).toFixed(3)})`;
       ctx.stroke();
     }
   });
@@ -1154,6 +1241,8 @@ new ResizeObserver(() => {
   waveCanvas.width = waveW * dpr; waveCanvas.height = waveH * dpr;
   waveCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
   drawWave();
+  fitNames();
+  fitDetail();
 }).observe(consoleView);
 new IntersectionObserver(([entry]) => { consoleInView = entry.isIntersecting; updateMotion(); }).observe(consoleView);
 document.addEventListener('visibilitychange', updateMotion);
@@ -1201,7 +1290,7 @@ function openConsole(focus = true) {
   cancelAnimationFrame(frameId);
   consoleView.hidden = false;
   selectLevel(walk ? walk.to : here, focus);
-  setHash(cats[cat].items[pick[cat]].id);
+  setHash(address(cats[cat].items[pick[cat]]));
   arrive();
   updateMotion();
 }
@@ -1210,6 +1299,7 @@ $('hud-profile').addEventListener('click', () => { openConsole(false); select(0,
 
 consoleView.hidden = false;
 $('stage').hidden = true;
+document.fonts.ready.then(() => { fitNames(); fitDetail(); });
 select(1, 0);
 applyHash();
 updateMotion();
@@ -1228,7 +1318,6 @@ cross.addEventListener('pointermove', event => {
     if (Math.abs(dx) < 10 || Math.abs(dx) < Math.abs(dy) * 1.2) return;
     touch.on = true;
     cross.setPointerCapture(event.pointerId);
-    hideDetail(-Math.sign(dx));
   }
   const last = cats.length - 1, step = cats[1].tab.offsetLeft - cats[0].tab.offsetLeft;
   let x = touch.from - dx / step;
@@ -1252,7 +1341,7 @@ function release(event) {
     target = Math.round(at + Math.max(-.6, Math.min(.6, nav.v * .12)));
     if (target === cat && Math.abs(dx) > 44) target = cat - Math.sign(dx);
   }
-  select(target, undefined, false, true);
+  select(target);
 }
 cross.addEventListener('pointerup', release);
 cross.addEventListener('pointercancel', release);
@@ -1262,23 +1351,25 @@ addEventListener('keydown', event => {
   if (consoleView.hidden || event.altKey || event.ctrlKey || event.metaKey || event.shiftKey) return;
   const target = event.target, key = event.key;
   if (page) {
-    if (key === 'Escape' || key === 'Backspace' || key === 'ArrowLeft') { event.preventDefault(); closePage(); }
+    if (key === 'Escape' || key === 'Backspace' || key === 'ArrowLeft') { event.preventDefault(); closePage(true, true); }
     return;
   }
   const box = consoleView.getBoundingClientRect();
   if (!consoleView.contains(target) && (target !== document.body || box.top < -box.height / 2)) return;
-  const onItem = target.classList.contains('xmb-item');
+  const onItem = target.classList.contains('xmb-item'), onTab = target.classList.contains('xmb-cat');
   let c = cat, j = pick[cat];
   if (key === 'ArrowLeft') c--;
   else if (key === 'ArrowRight') c++;
   else if (key === 'ArrowUp') j--;
+  else if (key === 'ArrowDown' && onTab) { event.preventDefault(); select(c, j, true); return; }
   else if (key === 'ArrowDown') j++;
   else if (key === 'Home' && onItem) j = 0;
   else if (key === 'End' && onItem) j = cats[cat].items.length - 1;
   else if (key === 'Enter' && target === document.body) { event.preventDefault(); cats[cat].els[j].click(); return; }
   else return;
   event.preventDefault();
-  if (c !== cat) select(c, undefined, true); else select(c, j, true);
+  if (c !== cat) { select(c, undefined, !onTab); if (onTab) cats[cat].tab.focus({ preventScroll: true }); }
+  else select(c, j, true);
 });
 
 /* ---------- input ---------- */
